@@ -1,0 +1,132 @@
+/* General Styles */
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* White Stripe (Header Section) */
+.white-stripe {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 15px 30px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brand-logo {
+    height: 50px;
+}
+
+.white-stripe button {
+    font-size: 16px;
+}
+
+.white-stripe a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Navbar */
+.mobile-header {
+    background-color: #007bff;
+    padding: 10px 0;
+}
+
+.navbar {
+    background: #007bff !important;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 10px 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Login Container
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+} */
+
+/* Login Box */
+.box-login {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.box-login h2 {
+    color: #333;
+    font-size: 22px;
+}
+
+/* Form Fields */
+.input-group-text {
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.form-control {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Login Dropdown */
+.form-select {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+/* Forgot Password */
+.text-end a {
+    color: #007bff;
+    font-size: 14px;
+}
+
+.text-end a:hover {
+    text-decoration: underline;
+}
+
+/* Login Button */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .white-stripe {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .brand-logo {
+        margin-bottom: 10px;
+    }
+
+    .login-container {
+        padding: 20px;
+    }
+}

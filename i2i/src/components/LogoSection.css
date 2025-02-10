@@ -1,0 +1,22 @@
+/* LogoSection.css */
+
+/* Background color for the container */
+.logo-section {
+    background-color: #16404d;
+  }
+  
+  /* Styling the white stripe */
+  .white-stripe {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+  }
+  
+  /* Styling the logo image */
+  .logo-image {
+    width: 150px; /* Adjust the width as per your requirements */
+    height: auto;
+    object-fit: contain;
+  }
+  

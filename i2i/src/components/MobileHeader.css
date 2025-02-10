@@ -1,0 +1,43 @@
+/* Mobile Header Styling */
+.mobile-header {
+    background-color: #000; /* Black background for the entire header */
+  }
+  
+  .navbar {
+    background-color: #000; /* Black background for the navbar */
+    padding: 10px 0;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-left: 0; /* Remove any left margin */
+  }
+  
+  .navbar-logo {
+    max-width: 100px; /* Adjust the logo size */
+    height: auto;
+  }
+  
+  .mobile-header .navbar-nav .nav-item .nav-link {
+    color: #fff; /* White text color for links */
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 15px;
+  }
+  
+  .mobile-header .navbar-nav .nav-item .nav-link:hover {
+    color: #FFD700; /* Golden color for hover effect */
+    text-decoration: none;
+  }
+  
+  .mobile-header .navbar-toggler-icon {
+    background-color: #fff; /* White icon color for toggler */
+  }
+  
+  .mobile-header .container-fluid {
+    padding-left: 0; /* Remove any left padding */
+    padding-right: 0; /* Remove any right padding */
+  }
+  
