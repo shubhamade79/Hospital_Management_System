@@ -40,11 +40,14 @@ const ReceptionAllotment = () => {
                 const response = await axios.get("http://localhost:5000/get-hospital-name", {
                     params: { admin_id },
                 });
-                if (response.data && response.data.hospital_name && response.data.hospital_address) {
+                if (response.data && response.data.hospital_name && response.data.hospital_address && response.data.hospital_city && response.data.hospital_state) {
                     setReceptionDetails((prevDetails) => ({
                         ...prevDetails,
                         hospital_name: response.data.hospital_name,
                         hospital_address:response.data.hospital_address,
+                        hospital_state:response.data.hospital_state,
+                        hospital_city:response.data.hospital_city,
+
                     }));
                 } else {
                     setErrorMessage("Hospital name & Address not found.");
@@ -69,7 +72,7 @@ const ReceptionAllotment = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { user_id, password, contact,email, name, hospital_name,hospital_address } = receptionDetails;
+        const { user_id, password, contact,email, name, hospital_name,hospital_address,hospital_city,hospital_state} = receptionDetails;
 
         if (!contact || !name ||!email || !hospital_name || !hospital_address) {
             setErrorMessage("All fields are required.");
@@ -85,6 +88,8 @@ const ReceptionAllotment = () => {
                 name,
                 hospital_name,
                 hospital_address,
+                hospital_city,
+                hospital_state,
                 email,  // Add email field
 
             });
@@ -191,6 +196,28 @@ const ReceptionAllotment = () => {
                             required
                             value={receptionDetails.hospital_address}
                             disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="hospital_city">Hospital City</label>
+                        <input
+                        type="text"
+                        className="form-control"
+                        id="hospital_city"
+                        name="hospital_city"
+                        value={receptionDetails.hospital_city}
+                        disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="hospital_state">Hospital State</label>
+                        <input
+                        type="text"
+                        className="form-control"
+                        id="hospital_state"
+                        name="hospital_state"
+                        value={receptionDetails.hospital_state}
+                        disabled
                         />
                     </div>
                     <button type="submit" className="btn btn-primary mt-3">

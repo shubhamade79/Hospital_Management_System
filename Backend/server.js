@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const nodemailer = require("nodemailer");
+const multer = require("multer");
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const transporter = nodemailer.createTransport({
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads")); // Serve uploaded files
 
 // MongoDB Connection
 const MONGO_URI = "mongodb://localhost:27017/hdmis";
@@ -187,6 +189,8 @@ const DoctorSchema = new mongoose.Schema({
     admin_id: { type: String, required: true },
     hospital_name: { type: String, required: true },
     hospital_address: { type: String, required: true },
+    hospital_city: { type: String, required: true },
+    hospital_state: { type: String, required: true },
 
 });
 
@@ -195,7 +199,9 @@ const HospitalAdminSchema = new mongoose.Schema({
     password: { type: String, required: true },
     full_name: { type: String, required: true },
     hospital_name: { type: String, required: true },
-    hospital_address: { type: String, required: true }
+    hospital_address: { type: String, required: true },
+    hospital_city: { type: String, required: true },
+    hospital_state: { type: String, required: true },
 }, { timestamps: true }); // Automatically adds createdAt & updatedAt fields
 
 
@@ -210,6 +216,8 @@ const HospitalLoginSchema = new mongoose.Schema({
     name: { type: String, required: true },
     hospital_address: { type: String, required: true },
     hospital_name: { type: String, required: true },
+    hospital_city: { type: String, required: true },
+    hospital_state: { type: String, required: true },
 
 });
 
@@ -497,7 +505,12 @@ const MedicalRecordSchema = new mongoose.Schema({
     //         instructions: { type: String, required: true }
     //     }
     // ]
-      created_at: { type: Date, default: Date.now } // Equivalent to `timestamp DEFAULT current_timestamp()`
+    created_at: { type: Date, default: Date.now },// Equivalent to `timestamp DEFAULT current_timestamp()`
+    hospital_address: { type: String, required: true },
+    hospital_name: { type: String, required: true },
+    hospital_city: { type: String, required: true },
+    hospital_state: { type: String, required: true },
+    filePath: {type: String},
 });
 
 const MedicalRecord = mongoose.model("MedicalRecord", MedicalRecordSchema);
@@ -506,7 +519,7 @@ const MedicalRecord = mongoose.model("MedicalRecord", MedicalRecordSchema);
 
 app.post("/updatePatientRecord", async (req, res) => {
     try {
-        const { hdmis_number, medicine, disease, doctor_id } = req.body;
+        const { hdmis_number, medicine, disease, doctor_id,hospital_name,hospital_address,hospital_state,hospital_city,filePath } = req.body;
 
         if (!hdmis_number || !disease || !doctor_id) {
             return res.status(400).json({ message: "Missing required fields" });
@@ -517,6 +530,11 @@ app.post("/updatePatientRecord", async (req, res) => {
             hdmis_number,
             disease,
             doctor_id,  // Assign the doctor_id received from the request
+            hospital_name,
+            hospital_address,
+            hospital_state,
+            hospital_city,
+            filePath,
         });
 
         // Save the new medical record
@@ -643,7 +661,7 @@ app.get('/doctors', async (req, res) => {
 
   app.post("/add-doctor", async (req, res) => {
     try {
-      const { doctor_id, password, phone, name, specialization, email, hospital_name,hospital_address, admin_id, start_time, end_time } = req.body;
+      const { doctor_id, password, phone, name, specialization, email, hospital_name,hospital_address, admin_id, start_time, end_time ,hospital_city,hospital_state} = req.body;
   
       // Validate required fields
       if (!doctor_id || !password || !phone || !name || !specialization || !email || !hospital_name || !admin_id || !start_time || !end_time) {
@@ -664,6 +682,8 @@ app.get('/doctors', async (req, res) => {
         email,
         hospital_name,
         hospital_address,
+        hospital_city,
+        hospital_state,
         admin_id,
         start_time,  // Ensure this is included
         end_time     // Ensure this is included
@@ -692,7 +712,7 @@ app.get('/doctors', async (req, res) => {
 
 app.post("/add-receptionist", async (req, res) => {
   try {
-    const { user_id, password, contact, name, hospital_name,hospital_address, admin_id ,email} = req.body;
+    const { user_id, password, contact, name, hospital_name,hospital_address, admin_id ,email,hospital_city,hospital_state} = req.body;
 
     if (!user_id || !password || !contact || !name || !hospital_name || !admin_id || !email) {
       return res.status(400).json({ success: false, message: "All fields are required" });
@@ -708,6 +728,8 @@ app.post("/add-receptionist", async (req, res) => {
       hospital_name,
       hospital_address,
       admin_id,
+      hospital_city,
+      hospital_state,
     });
     // Email content
     let mailOptions = {
@@ -744,7 +766,9 @@ app.get("/get-hospital-name", async (req, res) => {
         if (hospitalAdmin) {
             res.status(200).json({
                 hospital_name: hospitalAdmin.hospital_name,
-                hospital_address: hospitalAdmin.hospital_address
+                hospital_address: hospitalAdmin.hospital_address,
+                hospital_city:hospitalAdmin.hospital_city,
+                hospital_state:hospitalAdmin.hospital_state
             });
         } else {
             res.status(404).json({ message: "Hospital not found." });
@@ -978,7 +1002,179 @@ app.post("/storeManualUser", async (req, res) => {
         res.status(500).json({ message: "Database error" });
     }
 });
- 
+const otpStore = new Map();  // Define otpStore to store OTPs
+
+const findUserByIdAndRole = async (id, role) => {
+    let user;
+    switch (role) {
+        case "Doctor":
+            user = await Doctor.findOne({ doctor_id: id });
+            break;
+        case "Receptionist":
+            user = await HospitalLogin.findOne({ user_id: id });
+            break;
+        case "Admin":
+            user = await HospitalAdmin.findOne({ user_id: id });
+            break;
+        default:
+            return null;
+    }
+    return user ? { user, email: user.email, role } : null;
+};
+
+app.post("/send-otp", async (req, res) => {
+    const { id, role } = req.body;
+
+    const userInfo = await findUserByIdAndRole(id, role);
+    if (!userInfo) return res.status(400).json({ message: "User not found" });
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    otpStore.set(userInfo.email, otp);
+
+    console.log("Generated OTP for", userInfo.email, ":", otp);
+
+    const mailOptions = {
+        from: "ehr.management.team@gmail.com",
+        to: userInfo.email,
+        subject: "Password Reset OTP",
+        text: `Your OTP is ${otp}`,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error("Email sending error:", error);
+            return res.status(500).json({ message: "Failed to send OTP" });
+        }
+        res.json({ success: true, message: "OTP sent to email", email: userInfo.email });
+    });
+});
+
+
+
+app.post("/verify-otp", (req, res) => {
+    const { email, otp } = req.body;
+    console.log("Received OTP verification request:", email, otp);
+    console.log("Stored OTPs:", otpStore);
+
+    const storedOtp = otpStore.get(email);
+    if (storedOtp && String(storedOtp) === String(otp)) {
+        otpStore.delete(email);
+        return res.json({ success: true });
+    } else {
+        return res.status(400).json({ message: "Invalid OTP" });
+    }
+});
+
+
+app.post("/reset-password", async (req, res) => {
+    const { id, role, newPassword } = req.body;
+
+    const userInfo = await findUserByIdAndRole(id, role);
+    if (!userInfo) return res.status(400).json({ message: "User not found" });
+
+    try {
+        userInfo.user.password = newPassword;  // Directly saving the new password
+        await userInfo.user.save();
+
+        res.json({ success: true, message: "Password reset successfully" });
+    } catch (error) {
+        console.error("Error resetting password:", error);
+        res.status(500).json({ message: "Error resetting password" });
+    }
+});
+// Forgot Password (Send OTP)
+app.post("/forgot-password_patient", async (req, res) => {
+    try {
+        const { hdmis_number } = req.body;
+        const user = await User.findOne({ hdmis_number });
+
+        if (!user) return res.status(400).json({ message: "User not found" });
+
+        const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
+        const expiry = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+
+        otpStore.set(hdmis_number, { otp, expiry });
+
+        await transporter.sendMail({
+            from: "ehr.management.team@gmail.com",
+            to: user.email,
+            subject: "HDMIS - Password Reset OTP",
+            text: `Your OTP for password reset is: ${otp}`
+        });
+
+        res.json({ message: "OTP sent to your email" });
+
+
+    } catch (err) {
+        res.status(500).json({ message: "Error sending OTP" });
+    }
+});
+
+
+app.post("/reset-password_patient", async (req, res) => {
+    try {
+        const { hdmis_number, otp, new_password } = req.body;
+
+        const storedOtpData = otpStore.get(hdmis_number);
+
+        if (!storedOtpData || storedOtpData.otp !== parseInt(otp) || storedOtpData.expiry < Date.now()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        const user = await User.findOne({ hdmis_number });
+        if (!user) return res.status(400).json({ message: "User not found" });
+
+        user.password = new_password; // ⚠️ Storing password in plaintext is insecure
+        await user.save();
+
+        otpStore.delete(hdmis_number); // Remove OTP after successful reset
+
+        res.json({ message: "Password reset successful" });
+
+    } catch (err) {
+        res.status(500).json({ message: "Error resetting password" });
+    }
+});
+
+const fs = require("fs");
+
+// Multer Storage Config
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = "./uploads/prescriptions/";
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        console.log(req.body.hdmis_number)
+        const hdmisNumber = req.body.hdmis_number || "Unknown";
+        cb(null, `Prescription_${hdmisNumber}_${Date.now()}.pdf`);
+    },
+  });
+  
+  const upload = multer({ storage });
+
+// Endpoint to upload prescription PDF
+// Upload Prescription PDF
+app.post("/uploadPrescription", upload.single("pdf"), async (req, res) => {
+    try {
+        
+      const filePath = `/uploads/prescriptions/${req.file.filename}`;
+  
+      // Save to MongoDB
+      await MedicalRecord.updateOne(
+        { $set: { filePath } },
+        { upsert: true }
+      );
+  
+      res.json({ message: "File uploaded successfully", filePath });
+    } catch (error) {
+      res.status(500).json({ message: "File upload failed", error });
+    }
+  });
+  
 
 // Default Route
 app.get('/', (req, res) => {

@@ -35,7 +35,7 @@ const UserProfile = () => {
           </button>
         </div>
       ) : (
-        <Link to="/login" className="btn btn-primary btn-sm">
+        <Link to="/hospital-login" className="btn btn-primary btn-sm">
           Login
         </Link>
       )}

@@ -4,16 +4,25 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
 import "../Home/style1.css";
 import MobileHeader from "../components/MobileHeader";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
+import { Modal, Button } from "react-bootstrap"; // Import Modal and Button from Bootstrap
 
 const HospitalLogin = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const [selectedRole, setSelectedRole] = useState("");
   const [idPlaceholder, setIdPlaceholder] = useState("");
   const [hdmisNumber, setHdmisNumber] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [showForgotModal, setShowForgotModal] = useState(false); // State for modal
+  const [forgotRole, setForgotRole] = useState("");
+  const [forgotUserId, setForgotUserId] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [stage, setStage] = useState(1); // Stages for forgot password process
+  const [userEmail, setUserEmail] = useState(""); // Add this state
 
   const handleRoleChange = (e) => {
     const selected = e.target.value;
@@ -24,26 +33,23 @@ const HospitalLogin = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-  
+
     try {
       const response = await axios.post("http://localhost:5000/hospitalLogin", {
         user_id: hdmisNumber,
         password: password,
         role: selectedRole,
       });
-  
+
       if (response.data.user) {
         alert("Login successful!");
-  
-        // Clear old session data to avoid conflicts
+
         localStorage.clear();
-  
-        // Store new session data
+
         localStorage.setItem("user_id", response.data.user.user_id);
         localStorage.setItem("role", response.data.user.role);
         localStorage.setItem("username", response.data.user.full_name);
-  
-        // Store additional data based on role
+
         if (selectedRole === "Doctor") {
           localStorage.setItem("doctor_id", response.data.user.user_id);
           navigate(`/doctor-dashboard/${response.data.user.user_id}`);
@@ -61,7 +67,94 @@ const HospitalLogin = () => {
       setErrorMessage(error.response?.data?.message || "Login failed. Please try again.");
     }
   };
-  
+
+  // Forgot Password Handlers
+  const handleForgotPasswordClick = () => {
+    setShowForgotModal(true);
+    setStage(1);
+  };
+
+  const fetchEmail = async () => {
+    if (!forgotUserId || !forgotRole) {
+        alert("Please enter User ID and select a Role.");
+        return;
+    }
+
+    try {
+        const response = await axios.post("http://localhost:5000/send-otp", {
+            id: forgotUserId,
+            role: forgotRole,
+        });
+
+        if (response.data.success) {
+            alert("OTP has been sent to your registered email.");
+            setUserEmail(response.data.email);  // Store email for later verification
+            setStage(2);
+        } else {
+            alert("User not found.");
+        }
+    } catch (error) {
+        alert("Error sending OTP. Please try again.");
+    }
+};
+
+
+const verifyOtp = async () => {
+  if (!otp || !userEmail) {
+      alert("Please enter the OTP and ensure email is correct.");
+      return;
+  }
+
+  console.log("Verifying OTP for:", userEmail, "Entered OTP:", otp);
+
+  try {
+      const response = await axios.post("http://localhost:5000/verify-otp", {
+          email: userEmail.trim(),
+          otp: otp,
+      });
+
+      console.log("OTP Verification Response:", response.data);
+
+      if (response.data.success) {
+          alert("OTP verified successfully.");
+          setStage(3);
+      } else {
+          alert("Invalid OTP. Please try again.");
+      }
+  } catch (error) {
+      console.error("OTP Verification Error:", error.response?.data || error.message);
+      alert("Error verifying OTP: " + (error.response?.data?.message || "Server error"));
+  }
+};
+
+
+
+
+const resetPassword = async () => {
+  if (!newPassword) {
+      alert("Please enter a new password.");
+      return;
+  }
+
+  try {
+      const response = await axios.post("http://localhost:5000/reset-password", {
+          id: forgotUserId,
+          role: forgotRole,
+          newPassword: newPassword,
+      });
+
+      if (response.data.success) {
+          alert("Password reset successfully.");
+          setShowForgotModal(false);
+      } else {
+          alert("Error resetting password.");
+      }
+  } catch (error) {
+      console.error("Password Reset Error:", error.response?.data || error.message);
+      alert("Error resetting password.");
+  }
+};
+
 
   return (
     <div>
@@ -129,7 +222,7 @@ const HospitalLogin = () => {
                       />
                     </div>
                     <div className="text-end mt-2">
-                      <a href="forgot-password.php">Forgot Password?</a>
+                      <a href="#" onClick={handleForgotPasswordClick}>Forgot Password?</a>
                     </div>
                   </div>
 
@@ -146,6 +239,38 @@ const HospitalLogin = () => {
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      <Modal show={showForgotModal} onHide={() => setShowForgotModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reset Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {stage === 1 ? (
+            <>
+              <label>Select Role</label>
+              <select className="form-select mb-2" value={forgotRole} onChange={(e) => setForgotRole(e.target.value)}>
+                <option value="">Choose Role</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Reception">Reception</option>
+                <option value="Hospital Admin">Hospital Admin</option>
+              </select>
+              <input type="text" className="form-control mb-2" placeholder="Enter User ID" value={forgotUserId} onChange={(e) => setForgotUserId(e.target.value)} />
+              <Button onClick={fetchEmail}>Fetch Email</Button>
+            </>
+          ) : stage === 2 ? (
+            <>
+              <input type="text" className="form-control mb-2" placeholder="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} />
+              <Button onClick={verifyOtp}>Verify OTP</Button>
+            </>
+          ) : (
+            <>
+              <input type="password" className="form-control mb-2" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+              <Button onClick={resetPassword}>Reset Password</Button>
+            </>
+          )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

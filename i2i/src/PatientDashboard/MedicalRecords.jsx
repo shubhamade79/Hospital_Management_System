@@ -40,7 +40,12 @@ const MedicalRecords = () => {
                         <tr>
                             <th>Doctor ID</th>
                             <th>Disease</th>
-                            <th>Created At</th>
+                            <th>Hospital Name</th>
+                            <th>Hospital Address</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Checkup Date & Time</th>
+                            <th>Prescription</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,7 +53,23 @@ const MedicalRecords = () => {
                             <tr key={index}>
                                 <td>{record.doctor_id}</td>
                                 <td>{record.disease}</td>
+                                <td>{record.hospital_name}</td>
+                                <td>{record.hospital_address}</td>
+                                <td>{record.hospital_city}</td>
+                                <td>{record.hospital_state}</td>
                                 <td>{new Date(record.created_at).toLocaleString()}</td>
+                                <td>{record.filePath ? (
+                                        <a 
+                                            href={`http://localhost:5000${record.filePath}`} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="btn btn-primary btn-sm"
+                                        >
+                                            View Prescription
+                                        </a>
+                                    ) : (
+                                        <span className="text-muted">No File</span>
+                                    )}</td>
                             </tr>
                         ))}
                     </tbody>

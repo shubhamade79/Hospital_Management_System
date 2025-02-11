@@ -40,11 +40,13 @@ const DoctorAllotment = () => {
         const response = await axios.get("http://localhost:5000/get-hospital-name", {
           params: { admin_id },
         });
-        if (response.data.hospital_name && response.data.hospital_address) {
+        if (response.data.hospital_name && response.data.hospital_address && response.data.hospital_state && response.data.hospital_city) {
           setDoctorDetails((prevDetails) => ({
             ...prevDetails,
             hospital_name: response.data.hospital_name,
             hospital_address: response.data.hospital_address,
+            hospital_state:response.data.hospital_state,
+            hospital_city:response.data.hospital_city
           }));
         } else {
           setErrorMessage("Hospital name not found.");
@@ -172,7 +174,7 @@ const DoctorAllotment = () => {
             />
           </div>
           <div className="form-group">
-  <label htmlFor="start_time">Start Time</label>
+            <label htmlFor="start_time">Start Time</label>
             <input
               type="time"
               className="form-control"
@@ -215,6 +217,28 @@ const DoctorAllotment = () => {
               id="hospital_address"
               name="hospital_address"
               value={doctorDetails.hospital_address}
+              disabled
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="hospital_city">Hospital City</label>
+            <input
+              type="text"
+              className="form-control"
+              id="hospital_city"
+              name="hospital_city"
+              value={doctorDetails.hospital_city}
+              disabled
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="hospital_state">Hospital State</label>
+            <input
+              type="text"
+              className="form-control"
+              id="hospital_state"
+              name="hospital_state"
+              value={doctorDetails.hospital_state}
               disabled
             />
           </div>

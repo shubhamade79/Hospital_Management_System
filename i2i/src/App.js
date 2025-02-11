@@ -16,6 +16,7 @@ import ReceptionDetails from "./Details/ReceptionDetails";
 import DoctorDetails from "./Details/DoctorDetails";
 import ReceptionAppointment from "./ReceptionAppoinment/ReceptionAppoinment";
 import PatientDashboard from "./PatientDashboard/PatientDashboard";
+import ForgotPassword from "./components/ForgotPassword";
 function App() {
   return (
     <Router>
@@ -35,7 +36,7 @@ function App() {
         <Route path="/doctor-details/:doctor_id" element={<DoctorDetails />} />
         <Route path="/reception-details/:user_id" element={<ReceptionDetails />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
-
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
 
 
