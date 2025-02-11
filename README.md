@@ -27,7 +27,7 @@ Git
 ### Backend Setup (Node.js & Express)
 #### Clone the repository:
 ```bash
-git clone [https://github.com/your-repo/health-data-management.git](https://github.com/shubhamade79/Hospital_Management_System)
+git clone https://github.com/your-repo/health-data-management.git
 cd Hospital_Management_System/backend
 ```
 
