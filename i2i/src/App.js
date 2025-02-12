@@ -37,9 +37,6 @@ function App() {
         <Route path="/reception-details/:user_id" element={<ReceptionDetails />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-
-
-
         <Route path="/About" element={<About />} />
       </Routes>
     </Router>
