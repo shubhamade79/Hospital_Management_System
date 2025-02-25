@@ -17,23 +17,18 @@ const PatientLogin = () => {
 
     const navigate = useNavigate();
 
-    // Handle login submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!hdmisNumber || !password) {
             setError("Both fields are required");
             return;
         }
-
         try {
             const response = await axios.post("http://localhost:5000/login", {
                 hdmis_number: hdmisNumber,
                 password
             });
-
             localStorage.setItem("patient", JSON.stringify(response.data.patient));
-
             alert(response.data.message);
             navigate("/patient-dashboard");
         } catch (error) {
@@ -41,13 +36,11 @@ const PatientLogin = () => {
         }
     };
 
-    // Handle forgot password request
     const handleForgotPassword = async () => {
         if (!hdmisNumber) {
             setError("Please enter your HDMIS number.");
             return;
         }
-
         try {
             const response = await axios.post("http://localhost:5000/forgot-password_patient", { hdmis_number: hdmisNumber });
             alert(response.data.message);
@@ -57,20 +50,17 @@ const PatientLogin = () => {
         }
     };
 
-    // Handle password reset request
     const handleResetPassword = async () => {
         if (!otp || !newPassword) {
             setError("OTP and new password are required.");
             return;
         }
-
         try {
             const response = await axios.post("http://localhost:5000/reset-password_patient", {
                 hdmis_number: hdmisNumber,
                 otp,
                 new_password: newPassword
             });
-
             alert(response.data.message);
             setForgotPassword(false);
             setOtpSent(false);
@@ -84,115 +74,96 @@ const PatientLogin = () => {
     return (
         <div>
             <MobileHeader />
-            <div className="container login-container">
-                <div className="row justify-content-center">
-                    <div className="col-md-6 col-lg-4">
-                        <div className="box-login p-4 shadow rounded">
-                            <div className="text-center mb-4">
-                                <h2>HDMIS | Patient Login</h2>
+            <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
+                <div className="card p-4 shadow" style={{ width: "400px" }}>
+                    <h2 className="text-center">HDMIS | Patient Login</h2>
+                    {!forgotPassword ? (
+                        <form onSubmit={handleSubmit}>
+                            {error && <div className="alert alert-danger">{error}</div>}
+                            <div className="form-group mb-3">
+                                <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    placeholder="HDMIS Number" 
+                                    value={hdmisNumber} 
+                                    onChange={(e) => setHdmisNumber(e.target.value)} 
+                                    required 
+                                />
                             </div>
-
-                            {/* Login Form */}
-                            {!forgotPassword ? (
-                                <form onSubmit={handleSubmit}>
-                                    {error && <div className="alert alert-danger">{error}</div>}
-                                    
+                            <div className="form-group mb-3">
+                                <input 
+                                    type="password" 
+                                    className="form-control" 
+                                    placeholder="Password" 
+                                    value={password} 
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                    required 
+                                />
+                            </div>
+                            <div className="text-end mb-2">
+                                <button type="button" className="btn btn-link" onClick={() => setForgotPassword(true)}>
+                                    Forgot Password?
+                                </button>
+                            </div>
+                            <button type="submit" className="btn btn-primary w-100">
+                                Login
+                            </button>
+                            <div className="text-center mt-3">
+                                Don't have an account? <Link to="/create-hdmish-number">Create one</Link>
+                            </div>
+                        </form>
+                    ) : (
+                        <div>
+                            <h4 className="text-center">Reset Password</h4>
+                            {error && <div className="alert alert-danger">{error}</div>}
+                            <div className="form-group mb-3">
+                                <input 
+                                    type="text" 
+                                    className="form-control" 
+                                    placeholder="HDMIS Number" 
+                                    value={hdmisNumber} 
+                                    onChange={(e) => setHdmisNumber(e.target.value)} 
+                                    required 
+                                />
+                            </div>
+                            {!otpSent ? (
+                                <button onClick={handleForgotPassword} className="btn btn-warning w-100">
+                                    Send OTP
+                                </button>
+                            ) : (
+                                <div>
                                     <div className="form-group mb-3">
                                         <input 
                                             type="text" 
                                             className="form-control" 
-                                            placeholder="HDMIS Number" 
-                                            value={hdmisNumber} 
-                                            onChange={(e) => setHdmisNumber(e.target.value)} 
+                                            placeholder="Enter OTP" 
+                                            value={otp} 
+                                            onChange={(e) => setOtp(e.target.value)} 
                                             required 
                                         />
                                     </div>
-
                                     <div className="form-group mb-3">
                                         <input 
                                             type="password" 
                                             className="form-control" 
-                                            placeholder="Password" 
-                                            value={password} 
-                                            onChange={(e) => setPassword(e.target.value)} 
+                                            placeholder="New Password" 
+                                            value={newPassword} 
+                                            onChange={(e) => setNewPassword(e.target.value)} 
                                             required 
                                         />
                                     </div>
-
-                                    <div className="text-end mt-2">
-                                        <button type="button" className="btn btn-link" onClick={() => setForgotPassword(true)}>
-                                            Forgot Password?
-                                        </button>
-                                    </div>
-
-                                    <button type="submit" className="btn btn-primary w-100">
-                                        Login
+                                    <button onClick={handleResetPassword} className="btn btn-success w-100">
+                                        Reset Password
                                     </button>
-
-                                    <div className="new-account text-center mt-3">
-                                        Don't have an account yet? <Link to="/create-hdmish-number">Create an account</Link>
-                                    </div>
-                                </form>
-                            ) : (
-                                // Forgot Password Form
-                                <div>
-                                    <h4 className="text-center">Reset Password</h4>
-                                    {error && <div className="alert alert-danger">{error}</div>}
-
-                                    <div className="form-group mb-3">
-                                        <input 
-                                            type="text" 
-                                            className="form-control" 
-                                            placeholder="HDMIS Number" 
-                                            value={hdmisNumber} 
-                                            onChange={(e) => setHdmisNumber(e.target.value)} 
-                                            required 
-                                        />
-                                    </div>
-
-                                    {!otpSent ? (
-                                        <button onClick={handleForgotPassword} className="btn btn-warning w-100">
-                                            Send OTP
-                                        </button>
-                                    ) : (
-                                        <div>
-                                            <div className="form-group mb-3">
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
-                                                    placeholder="Enter OTP" 
-                                                    value={otp} 
-                                                    onChange={(e) => setOtp(e.target.value)} 
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <div className="form-group mb-3">
-                                                <input 
-                                                    type="password" 
-                                                    className="form-control" 
-                                                    placeholder="New Password" 
-                                                    value={newPassword} 
-                                                    onChange={(e) => setNewPassword(e.target.value)} 
-                                                    required 
-                                                />
-                                            </div>
-
-                                            <button onClick={handleResetPassword} className="btn btn-success w-100">
-                                                Reset Password
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    <div className="text-center mt-3">
-                                        <button className="btn btn-link" onClick={() => setForgotPassword(false)}>
-                                            Back to Login
-                                        </button>
-                                    </div>
                                 </div>
                             )}
+                            <div className="text-center mt-3">
+                                <button className="btn btn-link" onClick={() => setForgotPassword(false)}>
+                                    Back to Login
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

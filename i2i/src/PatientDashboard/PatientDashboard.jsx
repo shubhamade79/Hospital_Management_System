@@ -4,6 +4,8 @@ import MedicalRecords from "./MedicalRecords";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap is loaded
+import Header from "../components/Header";
+import PatientNavbar from "../components/patientnavbar";
 
 const PatientDashboard = () => {
     const navigate = useNavigate(); // Hook for navigation
@@ -12,11 +14,7 @@ const PatientDashboard = () => {
     const patientData = localStorage.getItem("patient");
     const patient = patientData ? JSON.parse(patientData) : null;
 
-    // Logout function
-    const handleLogout = () => {
-        localStorage.removeItem("patient"); // Clear patient session
-        navigate("/patient-login"); // Redirect to login page
-    };
+   
 
     if (!patient) {
         console.log("No patient data found in localStorage");
@@ -25,21 +23,11 @@ const PatientDashboard = () => {
 
     return (
         <div>
-            {/* ✅ Navbar with Username and Patient ID */}
-            <Navbar bg="dark" variant="dark" expand="lg" className="px-3">
-                <Navbar.Brand className="text-black" href="/">Hospital Management</Navbar.Brand>
-                <Nav className="ms-auto d-flex align-items-center">
-                    <span className="me-3 text-black">
-                        Welcome, {patient.full_name} (ID: {patient.patient_id})
-                    </span>
-                    <button className="btn btn-danger btn-sm" onClick={handleLogout}>
-                        Logout
-                    </button>
-                </Nav>
-            </Navbar>
+            {/* ✅ Navbar */}
+            <PatientNavbar />
 
             {/* ✅ Patient Dashboard Content */}
-            <div className="container mt-4 text-black">
+            <div className=" mt-4 text-black">
                 <MedicalRecords hdmisNumber={patient.hdmis_number} />
             </div>
         </div>

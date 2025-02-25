@@ -17,6 +17,8 @@ import DoctorDetails from "./Details/DoctorDetails";
 import ReceptionAppointment from "./ReceptionAppoinment/ReceptionAppoinment";
 import PatientDashboard from "./PatientDashboard/PatientDashboard";
 import ForgotPassword from "./components/ForgotPassword";
+import ContactUs from "./Home/ContactUs";
+import Profile from "./components/Profile";
 function App() {
   return (
     <Router>
@@ -38,6 +40,9 @@ function App() {
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/About" element={<About />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/profile/:id" element={<Profile />} />
+
       </Routes>
     </Router>
   );

@@ -22,7 +22,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads")); // Serve uploaded files
 
 // MongoDB Connection
-const MONGO_URI = "mongodb+srv://shubhamgormati:wzhp7NQHhQ9BdXLY@hospitalmanagementsyste.6ofik.mongodb.net/hdmis?retryWrites=true&w=majority";
+const MONGO_URI = "mongodb://localhost:27017/hdmis";
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
@@ -179,7 +179,7 @@ app.post("/storeAadhaar", async (req, res) => {
 // User Schemas
 const DoctorSchema = new mongoose.Schema({
     doctor_id: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    full_name: { type: String, required: true },
     specialization: { type: String, required: true },
     phone: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -213,7 +213,7 @@ const HospitalLoginSchema = new mongoose.Schema({
     admin_id: { type: String, required: false }, // Nullable
     contact: { type: String, required: false },
     email: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
+    full_name: { type: String, required: true },
     hospital_address: { type: String, required: true },
     hospital_name: { type: String, required: true },
     hospital_city: { type: String, required: true },
@@ -1175,6 +1175,40 @@ app.post("/uploadPrescription", upload.single("pdf"), async (req, res) => {
     }
   });
   
+
+  // Define Schema & Model
+const ContactSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    message: String,
+  });
+  
+const Contact = mongoose.model("Contact", ContactSchema);
+  
+  // Contact Form Submission API
+  app.post("/api/contact", async (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+  
+      // Store in MongoDB
+      const newMessage = new Contact({ name, email, message });
+      await newMessage.save();
+  
+      const mailOptions = {
+        from: email,
+        to: "ehr.management.team@gmail.com",
+        subject: "New Contact Form Submission",
+        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      };
+  
+      await transporter.sendMail(mailOptions);
+  
+      res.status(200).json({ success: true, message: "Message sent successfully!" });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
+
 
 // Default Route
 app.get('/', (req, res) => {

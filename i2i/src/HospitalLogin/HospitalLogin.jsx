@@ -161,7 +161,7 @@ const resetPassword = async () => {
       <MobileHeader />
       <div className="container login-container">
         <div className="row justify-content-center">
-          <div className="col-md-6 col-lg-4">
+          <div className="">
             <div className="box-login">
               <div className="text-center mb-4">
                 <h2>HDMIS | Hospital Login</h2>

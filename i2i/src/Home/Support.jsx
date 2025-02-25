@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './style1.css'; // Ensure your CSS styles for this component are available
+import { Link } from "react-router-dom"; // Import Link from React Router
 
 // Data for FAQ items
 const faqData = [
@@ -35,6 +36,7 @@ const Support = () => {
   };
 
   return (
+    
     <section className="faq-section">
       {/* Support Text */}
       <div className="faq-support">
@@ -43,7 +45,7 @@ const Support = () => {
         <p>
           Everything you need to know about the HDMIS number. Can't find the answers you are looking for?
         </p>
-        <button className="btn btn-primary">Contact Us</button>
+        <Link to="/contact"className="btn btn-primary">Contact Us</Link>
       </div>
 
       {/* FAQ Accordion */}

@@ -76,13 +76,13 @@ const deleteReceptionist = async (user_id) => {
   return (
     <div>
       <Header />
-      <div className="container">
+      <div className="">
         <h2 className="text-center mb-4">Admin Dashboard</h2>
         <div className="row">
           {/* Doctors Section */}
           <div className="col-md-6">
             <h3>Doctors Information</h3>
-            <button className="btn btn-primary" onClick={() => navigate('/doctor-allotment')}>
+            <button className="btn btn-info" onClick={() => navigate('/doctor-allotment')}>
               Doctor Allotment
             </button>
             {errorMessage && <p className="text-danger">{errorMessage}</p>}
@@ -121,7 +121,7 @@ const deleteReceptionist = async (user_id) => {
           {/* Receptionists Section */}
           <div className="col-md-6">
             <h3>Receptionists Information</h3>
-            <button className="btn btn-primary" onClick={() => navigate('/reception-allotment')}>
+            <button className="btn btn-info" onClick={() => navigate('/reception-allotment')}>
               Reception Allotment
             </button>
             {errorMessage && <p className="text-danger">{errorMessage}</p>}

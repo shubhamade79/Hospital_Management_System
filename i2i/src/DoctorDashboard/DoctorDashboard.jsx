@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../components/Header";
 
 const DoctorDashboard = () => {
@@ -90,7 +89,7 @@ const DoctorDashboard = () => {
   return (
     <div>
       <Header />
-      <div className="container mt-4">
+      <div className="mt-4">
         <h2 className="text-center mb-4">Doctor Dashboard</h2>
 
         {loading ? (

@@ -113,7 +113,7 @@ const ReceptionDashboard = () => {
   return (
     <div>
       <Header />
-      <div className="container mt-5">
+      <div className=" mt-5">
         <h2 className="text-center">Reception | Search & Register Patient</h2>
         {message && <p className="text-success text-center mt-3">{message}</p>}
 
@@ -127,7 +127,7 @@ const ReceptionDashboard = () => {
             onKeyDown={handleKeyDown}  // Listen for Enter key
             required
           />
-          <button className="btn btn-primary mt-2 w-100" onClick={handleSearch}>
+          <button className="btn  mt-2 text-center" onClick={handleSearch}>
             Search Patient
           </button>
         </div>

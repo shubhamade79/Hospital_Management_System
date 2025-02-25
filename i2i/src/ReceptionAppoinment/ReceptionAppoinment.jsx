@@ -86,7 +86,7 @@ const ReceptionAppointment = () => {
   return (
     <div>
       <Header />
-      <div className="container">
+      <div className="">
         <h2 className="text-center my-4">Today's Appointments</h2>
         {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
 
@@ -99,7 +99,7 @@ const ReceptionAppointment = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={handleAddAppointment}>
+          <button className="btn " onClick={handleAddAppointment}>
             + Add Appointment
           </button>
         </div>

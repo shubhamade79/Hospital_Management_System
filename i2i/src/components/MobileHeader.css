@@ -15,10 +15,17 @@
     margin-left: 0; /* Remove any left margin */
   }
   
-  .navbar-logo {
-    max-width: 100px; /* Adjust the logo size */
-    height: auto;
+  .navbar-logo img {
+    width: 80px;  /* Adjust width as needed */
+    height: auto; /* Maintain aspect ratio */
   }
+  
+  @media (max-width: 768px) {
+    .navbar-logo img {
+      width: 60px; /* Smaller logo for mobile */
+    }
+  }
+  
   
   .mobile-header .navbar-nav .nav-item .nav-link {
     color: #fff; /* White text color for links */
@@ -40,4 +47,17 @@
     padding-left: 0; /* Remove any left padding */
     padding-right: 0; /* Remove any right padding */
   }
-  
+  /* Ensures smooth transition for mobile nav */
+.nav-menu {
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Hide the mobile menu by default */
+.nav-hidden {
+  transform: translateY(-100%);
+}
+
+/* Show menu when toggled */
+.nav-visible {
+  transform: translateY(0);
+}

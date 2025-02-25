@@ -166,7 +166,7 @@ const DoctorPrescription = () => {
   return (
     <div>
       <Header />
-      <div className="container mt-4">
+      <div className=" mt-4">
         <h2 className="text-center mb-4">Doctor's Prescription</h2>
         {loading ? (
           <p className="text-center">Loading user details...</p>
@@ -193,7 +193,7 @@ const DoctorPrescription = () => {
             <div className="text-center">
             <button className="btn btn-secondary me-2" onClick={handleViewPDF}>View as PDF</button>
               <button className="btn btn-secondary me-2" onClick={handleDownloadPDF}>Download as PDF</button>
-              <button className="btn btn-primary" onClick={handleSubmit}>Save</button>
+              <button className="" onClick={handleSubmit}>Save</button>
             </div>
           </>
         ) : (

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // Import Link
 const Logins = () => {
   return (
     <section id="logins" className="our-blog container-fluid">
-      <div className="container">
+      {/* <div className="container"> */}
         <div className="inner-title text-center">
           <h1>Logins</h1>
         </div>
@@ -31,7 +31,7 @@ const Logins = () => {
                   <button className="btn btn-success btn-sm">Click Here</button>
                 </Link>
               </div>
-            </div>
+            {/* </div> */}
           </div>
 {/* Admin Login
             <div className="col-sm-4 blog-smk">

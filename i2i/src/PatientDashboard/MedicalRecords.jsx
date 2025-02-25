@@ -31,8 +31,9 @@ const MedicalRecords = () => {
     }, [patientId]);  // Fetch records when patient ID is available
 
     return (
-        <div className="container">
-            <h2 className="mt-3">Medical Records</h2>
+        <div>
+        <h2 className="mt-3">Medical Records</h2>
+        <div className="">
             {error && <div className="alert alert-danger">{error}</div>}
             {records.length > 0 ? (
                 <table className="table table-bordered mt-3">
@@ -77,6 +78,7 @@ const MedicalRecords = () => {
             ) : (
                 <p>No records found.</p>
             )}
+        </div>
         </div>
     );
 };
