@@ -99,7 +99,7 @@ const deleteReceptionist = async (user_id) => {
                 {doctors.map((doctor) => (
                   <tr key={doctor.doctor_id}>
                     <td>{doctor.doctor_id}</td>
-                    <td>{doctor.name}</td>
+                    <td>{doctor.full_name}</td>
                     <td>{doctor.specialization}</td>
                     <td>
                       <button
@@ -138,7 +138,7 @@ const deleteReceptionist = async (user_id) => {
                 {receptions.map((reception) => (
                   <tr key={reception.user_id}>
                     <td>{reception.user_id}</td>
-                    <td>{reception.name}</td>
+                    <td>{reception.full_name}</td>
                     <td>{reception.contact}</td>
                     <td>
                       <button
