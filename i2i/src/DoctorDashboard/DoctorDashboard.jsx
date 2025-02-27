@@ -21,7 +21,7 @@ const DoctorDashboard = () => {
     }
 
     axios
-      .get(`http://localhost:5000/doctorAppointments?doctor_id=${doctorId}`)
+      .get(`${process.env.REACT_APP_API_URL}/doctorAppointments?doctor_id=${doctorId}`)
       .then((response) => {
         if (response.data && response.data.length > 0) {
           const todayDate = new Date().toISOString().split("T")[0];

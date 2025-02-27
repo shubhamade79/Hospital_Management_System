@@ -16,7 +16,7 @@ const ForgotPassword = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/fetch-email", { hdmisNumber });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/fetch-email`, { hdmisNumber });
             setEmail(response.data.email);
             setStage(2); // Move to OTP stage
         } catch (error) {
@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
     const sendOtp = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/send-otp", { email });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/send-otp`, { email });
             alert(response.data.message);
         } catch (error) {
             setError(error.response?.data?.message || "Error sending OTP.");
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/verify-otp", { email, otp });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/verify-otp`, { email, otp });
             if (response.data.success) {
                 setStage(3); // Move to Reset Password stage
             } else {
@@ -58,7 +58,7 @@ const ForgotPassword = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/reset-password", { hdmisNumber, newPassword });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/reset-password`, { hdmisNumber, newPassword });
             alert(response.data.message);
             setStage(1); // Reset back to the start
         } catch (error) {

@@ -35,7 +35,7 @@ const HospitalLogin = () => {
     setErrorMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/hospitalLogin", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/hospitalLogin`, {
         user_id: hdmisNumber,
         password: password,
         role: selectedRole,
@@ -81,7 +81,7 @@ const HospitalLogin = () => {
     }
 
     try {
-        const response = await axios.post("http://localhost:5000/send-otp", {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/send-otp`, {
             id: forgotUserId,
             role: forgotRole,
         });
@@ -108,7 +108,7 @@ const verifyOtp = async () => {
   console.log("Verifying OTP for:", userEmail, "Entered OTP:", otp);
 
   try {
-      const response = await axios.post("http://localhost:5000/verify-otp", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/verify-otp`, {
           email: userEmail.trim(),
           otp: otp,
       });
@@ -137,7 +137,7 @@ const resetPassword = async () => {
   }
 
   try {
-      const response = await axios.post("http://localhost:5000/reset-password", {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/reset-password`, {
           id: forgotUserId,
           role: forgotRole,
           newPassword: newPassword,

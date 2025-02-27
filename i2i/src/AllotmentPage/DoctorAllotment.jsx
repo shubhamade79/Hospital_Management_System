@@ -35,7 +35,7 @@ const DoctorAllotment = () => {
   useEffect(() => {
     const fetchHospitalName = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/get-hospital-name", {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/get-hospital-name`, {
           params: { admin_id },
         });
         if (response.data.hospital_name && response.data.hospital_address) {
@@ -67,7 +67,7 @@ const DoctorAllotment = () => {
     setSuccessMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/add-doctor", doctorDetails);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/add-doctor`, doctorDetails);
       if (response.data.success) {
         setSuccessMessage("Doctor registered successfully!");
         setTimeout(() => navigate(`/admin-dashboard/${admin_id}`), 2000);

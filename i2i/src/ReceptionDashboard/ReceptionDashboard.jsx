@@ -18,7 +18,7 @@ const ReceptionDashboard = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/doctors");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/doctors`);
         setDoctors(response.data);
       } catch (error) {
         console.error("Error fetching doctors:", error);
@@ -44,7 +44,7 @@ const ReceptionDashboard = () => {
     setShowRegistration(false);
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/Patient_detail_for_appointment/${hdmisNumber}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/Patient_detail_for_appointment/${hdmisNumber}`);
       if (response.data) {
         setPatientData(response.data);
       } else {
@@ -64,7 +64,7 @@ const ReceptionDashboard = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/Patient_detail_for_appointment", {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/Patient_detail_for_appointment`, {
         hdmis_number: hdmisNumber,
         ...newPatient,
       });
@@ -93,7 +93,7 @@ const ReceptionDashboard = () => {
     }
 
     try {
-        const response = await axios.post("http://localhost:5000/api/book_appointment", {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/book_appointment`, {
             hdmis_number: hdmisNumber, // ✅ Ensure this is correct
             doctor_id: appointment.doctor_id,
             date: appointment.date,

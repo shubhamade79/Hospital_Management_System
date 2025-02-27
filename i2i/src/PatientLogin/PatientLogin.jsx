@@ -24,7 +24,7 @@ const PatientLogin = () => {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:5000/login", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
                 hdmis_number: hdmisNumber,
                 password
             });
@@ -42,7 +42,7 @@ const PatientLogin = () => {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:5000/forgot-password_patient", { hdmis_number: hdmisNumber });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/forgot-password_patient`, { hdmis_number: hdmisNumber });
             alert(response.data.message);
             setOtpSent(true);
         } catch (error) {
@@ -56,7 +56,7 @@ const PatientLogin = () => {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:5000/reset-password_patient", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/reset-password_patient`, {
                 hdmis_number: hdmisNumber,
                 otp,
                 new_password: newPassword

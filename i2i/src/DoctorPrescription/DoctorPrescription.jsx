@@ -23,11 +23,11 @@ const DoctorPrescription = () => {
       return;
     }
 
-    axios.get(`http://localhost:5000/getPatientDetails/${hdmisNumber}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/getPatientDetails/${hdmisNumber}`)
       .then((response) => setUserData(response.data))
       .catch(() => setError("Failed to load user details."));
 
-    axios.get(`http://localhost:5000/getDoctorDetails/${doctor_id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/getDoctorDetails/${doctor_id}`)
       .then((response) => setDoctorData(response.data))
       .catch(() => setError("Failed to load doctor details."))
       .finally(() => setLoading(false));
@@ -71,14 +71,14 @@ const DoctorPrescription = () => {
       formData.append("hospital_address", doctorData?.hospital_address);
   
       // Upload PDF to the backend
-      const response = await axios.post("http://localhost:5000/uploadPrescription", formData, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/uploadPrescription`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
       const filePath = response.data.filePath; // Assuming backend returns the file path
   
       // Save medical record with filePath in MongoDB
-      await axios.post("http://localhost:5000/updatePatientRecord", {
+      await axios.post(`${process.env.REACT_APP_API_URL}/updatePatientRecord`, {
         hdmis_number: hdmisNumber,
         disease,
         doctor_id,
@@ -90,7 +90,7 @@ const DoctorPrescription = () => {
       });
   
       // Delete appointment
-      await axios.delete(`http://localhost:5000/deleteAppointment/${hdmisNumber}/${doctor_id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/deleteAppointment/${hdmisNumber}/${doctor_id}`);
   
       alert("Record updated successfully, PDF stored, and appointment deleted.");
       navigate(`/doctor-dashboard/${doctor_id}`);

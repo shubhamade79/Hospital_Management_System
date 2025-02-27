@@ -31,7 +31,7 @@ const ReceptionAppointment = () => {
         return;
       }
   
-      const response = await axios.get("http://localhost:5000/get-appointments", {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/get-appointments`, {
         params: { reception_id: receptionId, date: todayDate },
       });
   
@@ -72,7 +72,7 @@ const ReceptionAppointment = () => {
     const deleteAppointment = async (appointment_id) => {
       if (window.confirm("Are you sure you want to delete this appointment?")) {
         try {
-          await axios.delete(`http://localhost:5000/delete-appointment/${appointment_id}`);
+          await axios.delete(`${process.env.REACT_APP_API_URL}/delete-appointment/${appointment_id}`);
           setAppointments(appointments.filter((appointment) => appointment.appointment_id !== appointment_id));
           alert("Appointment deleted successfully!");
         } catch (error) {

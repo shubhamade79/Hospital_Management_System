@@ -23,10 +23,10 @@ const AdminDashboard = () => {
       try {
         console.log("Fetching doctors and receptionists..."); // Debugging
 
-        const doctorResponse = await axios.get(`http://localhost:5000/doctors`, {
+        const doctorResponse = await axios.get(`${process.env.REACT_APP_API_URL}/doctors`, {
           params: { admin_id }, // Pass the admin_id as a query parameter
         });
-        const receptionResponse = await axios.get(`http://localhost:5000/receptions`, {
+        const receptionResponse = await axios.get(`${process.env.REACT_APP_API_URL}/receptions`, {
           params: { admin_id }, // Pass the admin_id as a query parameter
         });
 
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 const deleteDoctor = async (doctor_id) => {
   if (window.confirm("Are you sure you want to delete this doctor?")) {
     try {
-      await axios.delete(`http://localhost:5000/api/delete-doctor/${doctor_id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/delete-doctor/${doctor_id}`);
       setDoctors(doctors.filter((doctor) => doctor.doctor_id !== doctor_id));
       alert("Doctor deleted successfully!");
     } catch (error) {
@@ -62,7 +62,7 @@ const deleteDoctor = async (doctor_id) => {
 const deleteReceptionist = async (user_id) => {
   if (window.confirm("Are you sure you want to delete this receptionist?")) {
     try {
-      await axios.delete(`http://localhost:5000/api/delete-receptionist/${user_id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/delete-receptionist/${user_id}`);
       setReceptions(receptions.filter((reception) => reception.user_id !== user_id));
       alert("Receptionist deleted successfully!");
     } catch (error) {

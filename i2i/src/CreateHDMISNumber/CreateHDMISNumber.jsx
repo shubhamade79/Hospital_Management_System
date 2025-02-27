@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import MobileHeader from "../components/MobileHeader";
 import "./style1.css"
 
+
 const CreateHDMISNumber = () => {
     const [aadhaar, setAadhaar] = useState(["", "", ""]);
     const [fullName, setFullName] = useState("");
@@ -13,10 +14,10 @@ const CreateHDMISNumber = () => {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [useAadhaar, setUseAadhaar] = useState(true);
-
+    console.log(process.env.REACT_APP_API_URL);
     const sendHdmisEmail = async (hdmisNumber) => {
         try {
-            await axios.post("http://localhost:5000/sendHdmisEmail", { email, hdmis_number: hdmisNumber });
+            await axios.post(`${process.env.REACT_APP_API_URL}/sendHdmisEmail`, { email, hdmis_number: hdmisNumber });
             alert("HDMIS ID sent successfully via Email!");
         } catch (error) {
             alert("Failed to send HDMIS ID.");
@@ -25,7 +26,7 @@ const CreateHDMISNumber = () => {
 
     const fetchFullName = async (aadhaar_number) => {
         try {
-            const response = await axios.post("http://localhost:5000/getAadhaarDetails", { aadhaar_number });
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/getAadhaarDetails`, { aadhaar_number });
     
             if (response.data.message === "Aadhaar number already exists in the users table") {
                 alert("❌ This Aadhaar number is already registered! Please log in.");
@@ -57,7 +58,7 @@ const CreateHDMISNumber = () => {
                 return;
             }
             try {
-                const response = await axios.post("http://localhost:5000/storeAadhaar", {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeAadhaar`, {
                     aadhaar_number, full_name: fullName, password
                 });
 
@@ -77,7 +78,7 @@ const CreateHDMISNumber = () => {
                 return;
             }
             try {
-                const response = await axios.post("http://localhost:5000/storeManualUser", {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeManualUser`, {
                     full_name: fullName, email, phone_number: phoneNumber, password
                 });
 

@@ -36,7 +36,7 @@ const ReceptionAllotment = () => {
             }
 
             try {
-                const response = await axios.get("http://localhost:5000/get-hospital-name", {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/get-hospital-name`, {
                     params: { admin_id },
                 });
                 if (response.data && response.data.hospital_name && response.data.hospital_address && response.data.hospital_city && response.data.hospital_state) {
@@ -78,7 +78,7 @@ const ReceptionAllotment = () => {
         }
 
         try {
-            const response = await axios.post("http://localhost:5000/add-receptionist", {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/add-receptionist`, {
                 user_id,
                 password,
                 admin_id: localStorage.getItem("user_id"),

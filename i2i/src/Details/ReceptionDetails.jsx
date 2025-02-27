@@ -20,9 +20,9 @@ const ReceptionDetails = () => {
       return;
     }
   
-    console.log(`Fetching: http://localhost:5000/reception/${user_id}`);
+    console.log(`Fetching: ${process.env.REACT_APP_API_URL}/reception/${user_id}`);
   
-    axios.get(`http://localhost:5000/reception/${user_id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/reception/${user_id}`)
       .then(response => {
         console.log("API Response:", response.data);
         if (!response.data || Object.keys(response.data).length === 0) {
@@ -45,7 +45,7 @@ const ReceptionDetails = () => {
 
   // Submit updated details
   const handleUpdate = () => {
-    axios.put(`http://localhost:5000/reception/${user_id}`, editedData)
+    axios.put(`${process.env.REACT_APP_API_URL}/reception/${user_id}`, editedData)
       .then(response => {
         console.log("Update Response:", response.data);
         setReception(editedData);
@@ -68,7 +68,7 @@ const ReceptionDetails = () => {
     isEditing ? (
       <div className="reception-form">
         <label><strong>Name:</strong></label>
-        <input type="text" name="name" value={editedData.name} onChange={handleChange} className="form-control" />
+        <input type="text" name="name" value={editedData.full_name} onChange={handleChange} className="form-control" />
         
         <label><strong>Contact:</strong></label>
         <input type="text" name="contact" value={editedData.contact} onChange={handleChange} className="form-control" />
@@ -79,7 +79,7 @@ const ReceptionDetails = () => {
     ) : (
       <div>
         <p><strong>ID:</strong> {reception.user_id}</p>
-        <p><strong>Name:</strong> {reception.name}</p>
+        <p><strong>Name:</strong> {reception.full_name}</p>
         <p><strong>Contact:</strong> {reception.contact}</p>
         <p><strong>Hospital Name:</strong> {reception.hospital_name}</p>
         <p><strong>Hospital Address:</strong> {reception.hospital_address}</p>

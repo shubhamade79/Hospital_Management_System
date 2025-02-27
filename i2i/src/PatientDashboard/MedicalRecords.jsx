@@ -20,7 +20,7 @@ const MedicalRecords = () => {
             if (!patientId) return;  // Ensure patient ID is available before fetching
 
             try {
-                const response = await axios.get(`http://localhost:5000/medical-records/${patientId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/medical-records/${patientId}`);
                 setRecords(response.data);
             } catch (error) {
                 setError(error.response?.data?.message || "Error fetching records");
@@ -61,7 +61,7 @@ const MedicalRecords = () => {
                                 <td>{new Date(record.created_at).toLocaleString()}</td>
                                 <td>{record.filePath ? (
                                         <a 
-                                            href={`http://localhost:5000${record.filePath}`} 
+                                            href={`${process.env.REACT_APP_API_URL}${record.filePath}`} 
                                             target="_blank" 
                                             rel="noopener noreferrer"
                                             className="btn btn-primary btn-sm"

@@ -15,7 +15,7 @@ const DoctorDetails = () => {
   useEffect(() => {
     const fetchDoctorDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/doctor/${doctor_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/doctor/${doctor_id}`);
         if (response.data) {
           setDoctor(response.data);
           setEditedDoctor(response.data);
@@ -40,7 +40,7 @@ const DoctorDetails = () => {
 
   // Submit the updated details
   const handleUpdate = () => {
-    axios.put(`http://localhost:5000/doctor/${doctor_id}`, editedDoctor)
+    axios.put(`${process.env.REACT_APP_API_URL}/doctor/${doctor_id}`, editedDoctor)
       .then(response => {
         console.log("Update Response:", response.data);
         setDoctor(editedDoctor);
@@ -64,7 +64,7 @@ const DoctorDetails = () => {
       {isEditing ? (
         <div className="doctor-form">
           <label><strong>Name:</strong></label>
-          <input type="text" name="name" value={editedDoctor.name} onChange={handleChange} className="form-control" />
+          <input type="text" name="name" value={editedDoctor.full_name} onChange={handleChange} className="form-control" />
 
           <label><strong>Specialization:</strong></label>
           <input type="text" name="specialization" value={editedDoctor.specialization} onChange={handleChange} className="form-control" />
@@ -82,7 +82,7 @@ const DoctorDetails = () => {
       ) : (
         <div>
           <p><strong>ID:</strong> {doctor.doctor_id}</p>
-          <p><strong>Name:</strong> {doctor.name}</p>
+          <p><strong>Name:</strong> {doctor.full_name}</p>
           <p><strong>Specialization:</strong> {doctor.specialization}</p>
           <p><strong>Contact Number:</strong> {doctor.phone}</p>
           <p><strong>Email:</strong> {doctor.email}</p>
