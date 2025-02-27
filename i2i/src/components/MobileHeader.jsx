@@ -123,18 +123,14 @@ const MobileHeader = () => {
                   </button>
                 </li>
               ) : (
-                <>
-                  <li className="nav-item">
+                <div className="col=3">
                     <Link to="/patient-login">
                       <button className="btn btn-success btn-sm">Patient Login</button>
                     </Link>
-                  </li>
-                  <li className="nav-item">
                     <Link to="/hospital-login">
                       <button className="btn btn-success btn-sm">Hospital Login</button>
                     </Link>
-                  </li>
-                </>
+                </div>
               )}
             </ul>
           </div>
