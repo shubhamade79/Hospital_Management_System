@@ -66,7 +66,7 @@ const MobileHeader = () => {
 
           {/* Navbar Toggler */}
           <button
-            className="navbar-toggler bg-white"
+            className="navbar-toggler navbar-dark"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
