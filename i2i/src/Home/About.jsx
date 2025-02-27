@@ -7,7 +7,7 @@ import image4 from "../HDMIS_IMGS/IMG_HDMIS 5.svg";
 const BenefitsSection = () => {
   return (
     <section className="benefits-section">
-      <h1>Benefits of ABHA Number</h1>
+      <h1>Benefits of HDMIS Number</h1>
       <p>
         HDMIS number is a 14-digit number that will uniquely identify you as a participant in India’s digital
         healthcare ecosystem...
