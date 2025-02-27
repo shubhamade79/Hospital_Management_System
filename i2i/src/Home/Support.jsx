@@ -10,14 +10,14 @@ const faqData = [
       "HDMIS Number is a 14-digit number that uniquely identifies you in India's healthcare ecosystem.",
   },
   {
-    question: "What is HDMIS Address?",
+    question: "What is HDMIS Number?",
     answer:
-      "HDMIS Address is a unique identifier used to access your health records digitally.",
+      "HDMIS Number is a unique identifier used to access your health records digitally.",
   },
   {
     question: "Linking HDMIS Number with HDMIS Address",
     answer:
-      "You can link your HDMIS Number with your ABHA Address for seamless integration.",
+      "You can link your HDMIS Number with your HDMIS Number for seamless integration.",
   },
   {
     question: "Voluntary Opt-out?",
