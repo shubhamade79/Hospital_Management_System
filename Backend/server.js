@@ -24,7 +24,7 @@ app.use("/uploads", express.static("uploads")); // Serve uploaded files
 // MongoDB Connection
 // const MONGO_URI = "mongodb://localhost:27017/hdmis";
 
-const MONGO_URI = "mongodb+srv://shubhamgormati:3UvoIYPeKLIGHFho@hospitalmanagementsyste.6ofik.mongodb.net/?retryWrites=true&w=majority&appName=hospitalmanagementsystem";
+const MONGO_URI = "mongodb+srv://shubhamgormati:yv6VsIshzOJsgtOP@hospitalmanagementsyste.6ofik.mongodb.net/?retryWrites=true&w=majority&appName=hospitalmanagementsystem";
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
