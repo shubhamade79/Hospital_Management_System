@@ -22,10 +22,9 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads")); // Serve uploaded files
 
 // MongoDB Connection
-// const MONGO_URI = "mongodb://localhost:27017/hdmis";
+const MONGO_URI = "mongodb://localhost:27017/hdmis";
 
 // const MONGO_URI = "mongodb+srv://shubhamgormati:3UvoIYPeKLIGHFho@hospitalmanagementsyste.6ofik.mongodb.net/?retryWrites=true&w=majority&appName=hospitalmanagementsystem";
-const MONGO_URI = "mongodb+srv://shubhamgormati:MnPK0bCMfCl5hljj@hospitalmanagementsyste.6ofik.mongodb.net/?retryWrites=true&w=majority&appName=hospitalmanagementsystem";
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
@@ -1029,6 +1028,7 @@ const findUserByIdAndRole = async (id, role) => {
 };
 
 app.post("/send-otp", async (req, res) => {
+  console.log("Received request body:", req.body);  // Log request
     const { id, role } = req.body;
 
     const userInfo = await findUserByIdAndRole(id, role);
