@@ -1019,6 +1019,9 @@ const findUserByIdAndRole = async (id, role) => {
         case "Admin":
             user = await HospitalAdmin.findOne({ user_id: id });
             break;
+        case "user":
+                user = await AadharDetails.findOne({ email: id });
+                break;
         default:
             return null;
     }
