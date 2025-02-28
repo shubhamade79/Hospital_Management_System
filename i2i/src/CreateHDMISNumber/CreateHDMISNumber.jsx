@@ -2,108 +2,105 @@ import { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MobileHeader from "../components/MobileHeader";
-import "./style1.css"
-
+import "./style1.css";
 
 const CreateHDMISNumber = () => {
     const [aadhaar, setAadhaar] = useState(["", "", ""]);
+    const [email, setEmail] = useState("");
+    const [otp, setOtp] = useState("");
+    const [isOtpSent, setIsOtpSent] = useState(false);
+    const [isOtpVerified, setIsOtpVerified] = useState(false);
     const [fullName, setFullName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [hdmisNumber, setHdmisNumber] = useState("");
     const [submittedName, setSubmittedName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
     const [useAadhaar, setUseAadhaar] = useState(true);
-    console.log(process.env.REACT_APP_API_URL);
-    const sendHdmisEmail = async (hdmisNumber) => {
-        try {
-            await axios.post(`${process.env.REACT_APP_API_URL}/sendHdmisEmail`, { email, hdmis_number: hdmisNumber });
-            alert("HDMIS ID sent successfully via Email!");
-        } catch (error) {
-            alert("Failed to send HDMIS ID.");
-        }
-    };
 
-    const fetchFullName = async (aadhaar_number) => {
+    // 1️⃣ Function to fetch email based on Aadhaar
+    const fetchEmailFromAadhaar = async (aadhaar_number) => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/getAadhaarDetails`, { aadhaar_number });
-    
-            if (response.data.message === "Aadhaar number already exists in the users table") {
-                alert("❌ This Aadhaar number is already registered! Please log in.");
-                return;  // Stop execution if duplicate is found
-            }
-    
-            if (response.data.full_name) {
-                setFullName(response.data.full_name);
+
+            if (response.data.email) {
                 setEmail(response.data.email);
-                setPhoneNumber(response.data.phone_number);
+                sendOtp(response.data.email);  // Trigger OTP sending
             } else {
-                alert("Aadhaar number not found");
+                alert("Aadhaar not found");
             }
         } catch (error) {
-            if (error.response && error.response.status === 409) {
-                alert("❌ This Aadhaar number is already registered! Please log in.");
+            alert("Failed to fetch Aadhaar details.");
+        }
+    };
+
+    // 2️⃣ Function to send OTP to fetched email
+    const sendOtp = async (email) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/send-otp`, { id: email, role: "user" });
+            if (response.data.success) {
+                alert("OTP sent to email.");
+                setIsOtpSent(true);
             } else {
-                alert("Failed to fetch Aadhaar details.");
+                alert("Failed to send OTP.");
             }
-        }
-    };
-    
-
-    const handleSubmit = async () => {
-        if (useAadhaar) {
-            const aadhaar_number = aadhaar.join("");
-            if (aadhaar_number.length !== 12 || !fullName || !password) {
-                alert("Please fill all fields correctly");
-                return;
-            }
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeAadhaar`, {
-                    aadhaar_number, full_name: fullName, password
-                });
-
-                if (response.data.hdmis_number) {
-                    setHdmisNumber(response.data.hdmis_number);
-                    setSubmittedName(fullName);
-                    sendHdmisEmail(response.data.hdmis_number);
-                } else {
-                    alert("Failed to generate HDMIS number");
-                }
-            } catch (error) {
-                alert("Failed to store user data");
-            }
-        } else {
-            if (!fullName || !email || !phoneNumber || !password) {
-                alert("Please fill all fields correctly");
-                return;
-            }
-            try {
-                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeManualUser`, {
-                    full_name: fullName, email, phone_number: phoneNumber, password
-                });
-
-                if (response.data.hdmis_number) {
-                    setHdmisNumber(response.data.hdmis_number);
-                    setSubmittedName(fullName);
-                    sendHdmisEmail(response.data.hdmis_number);
-                } else {
-                    alert("Failed to generate HDMIS number");
-                }
-            } catch (error) {
-                alert("Failed to store user data");
-            }
+        } catch (error) {
+            alert("Error sending OTP.");
         }
     };
 
+    // 3️⃣ Function to verify OTP
+    const verifyOtp = async () => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/verify-otp`, { email, otp });
+
+            if (response.data.success) {
+                alert("OTP verified successfully!");
+                setIsOtpVerified(true);
+                fetchUserData(); // Fetch user details after OTP verification
+            } else {
+                alert("Invalid OTP");
+            }
+        } catch (error) {
+            alert("OTP verification failed.");
+        }
+    };
+
+    // 4️⃣ Fetch user details after OTP verification
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/getAadhaarDetails`, { aadhaar_number: aadhaar.join("") });
+
+            if (response.data.full_name) {
+                setFullName(response.data.full_name);
+                setPhoneNumber(response.data.phone_number);
+            } else {
+                alert("Aadhaar details not found");
+            }
+        } catch (error) {
+            alert("Error fetching user details.");
+        }
+    };
+
+    // 5️⃣ Handle Aadhaar input and trigger email fetching
     const handleAadhaarChange = (i, value) => {
         const newAadhaar = [...aadhaar];
         newAadhaar[i] = value;
         setAadhaar(newAadhaar);
-
+    
+        // Reset OTP states if Aadhaar is modified
+        setIsOtpSent(false);
+        setIsOtpVerified(false);
+        setOtp("");
+        setEmail("");
+        setFullName("");
+        setPhoneNumber("");
+    
+        // Check if Aadhaar is complete (12 digits) before fetching email
         if (newAadhaar.join("").length === 12) {
-            fetchFullName(newAadhaar.join(""));
+            fetchEmailFromAadhaar(newAadhaar.join(""));
         }
     };
+    
 
     return (
         <div>
@@ -134,20 +131,35 @@ const CreateHDMISNumber = () => {
                                 </div>
                             </div>
 
-                            <h5>Fetched Aadhaar Details</h5>
-                            <input type="text" className="form-control mb-2" value={fullName} disabled />
-                            <input type="email" className="form-control mb-2" value={email} disabled />
-                            <input type="text" className="form-control mb-2" value={phoneNumber} disabled />
+                            {/* Show email & OTP input if Aadhaar is valid */}
+                            {email && isOtpSent && !isOtpVerified && (
+                                <>
+                                    <h5>Verify OTP</h5>
+                                    <input type="text" className="form-control mb-2" placeholder="Enter OTP" 
+                                        value={otp} onChange={(e) => setOtp(e.target.value)} required />
+                                    <button className="btn btn-warning w-100" onClick={verifyOtp}>Verify OTP</button>
+                                </>
+                            )}
+
+                            {/* Show fetched user details after OTP verification */}
+                            {isOtpVerified && fullName && (
+                                <>
+                                    <h5>Fetched Aadhaar Details</h5>
+                                    <input type="text" className="form-control mb-2" value={fullName} disabled />
+                                    <input type="email" className="form-control mb-2" value={email} disabled />
+                                    <input type="text" className="form-control mb-2" value={phoneNumber} disabled />
+                                </>
+                            )}
                         </>
                     ) : (
                         <>
                             <h5>Enter Your Details</h5>
                             <input type="text" className="form-control mb-2" placeholder="Full Name *"
-                                value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+                               onChange={(e) => setFullName(e.target.value)} required />
                             <input type="email" className="form-control mb-2" placeholder="Email ID *"
-                                value={email} onChange={(e) => setEmail(e.target.value)} required />
+                                onChange={(e) => setEmail(e.target.value)} required />
                             <input type="text" className="form-control mb-2" placeholder="Mobile Number *"
-                                value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} required />
+                                 onChange={(e) => setPhoneNumber(e.target.value)} required />
                         </>
                     )}
 
@@ -155,15 +167,9 @@ const CreateHDMISNumber = () => {
                     <input type="password" className="form-control mb-3" placeholder="Password *"
                         value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-                    <button type="button" className="btn btn-success w-100" onClick={handleSubmit}>Submit</button>
-
-                    {hdmisNumber && submittedName && (
-                        <div className="mt-4 text-center">
-                            <h4>✅ HDMIS Number Created</h4>
-                            <p><strong>Name:</strong> {submittedName}</p>
-                            <p><strong>HDMIS Number:</strong> {hdmisNumber}</p>
-                        </div>
-                    )}
+                    <button type="button" className="btn btn-success w-100" onClick={() => alert("Submit logic here!")}>
+                        Submit
+                    </button>
                 </div>
             </div>
         </div>
