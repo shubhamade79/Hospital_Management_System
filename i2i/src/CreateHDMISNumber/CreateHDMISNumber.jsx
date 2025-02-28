@@ -1,8 +1,8 @@
-import { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import MobileHeader from "../components/MobileHeader";
 import "./style1.css";
+import { useState } from "react";
 
 const CreateHDMISNumber = () => {
     const [aadhaar, setAadhaar] = useState(["", "", ""]);
@@ -16,7 +16,15 @@ const CreateHDMISNumber = () => {
     const [hdmisNumber, setHdmisNumber] = useState("");
     const [submittedName, setSubmittedName] = useState("");
     const [useAadhaar, setUseAadhaar] = useState(true);
-
+    const sendHdmisEmail = async (hdmisNumber) => {
+                try {
+                    await axios.post(`${process.env.REACT_APP_API_URL}/sendHdmisEmail`, { email, hdmis_number: hdmisNumber });
+                    alert("HDMIS ID sent successfully via Email!");
+                } catch (error) {
+                    alert("Failed to send HDMIS ID.");
+                }
+            };
+        
     // 1️⃣ Function to fetch email based on Aadhaar
     const fetchEmailFromAadhaar = async (aadhaar_number) => {
         try {
@@ -32,7 +40,50 @@ const CreateHDMISNumber = () => {
             alert("Failed to fetch Aadhaar details.");
         }
     };
-
+    const handleSubmit = async () => {
+                if (useAadhaar) {
+                    const aadhaar_number = aadhaar.join("");
+                    if (aadhaar_number.length !== 12 || !fullName || !password) {
+                        alert("Please fill all fields correctly");
+                        return;
+                    }
+                    try {
+                        const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeAadhaar`, {
+                            aadhaar_number, full_name: fullName, password
+                        });
+        
+                        if (response.data.hdmis_number) {
+                            setHdmisNumber(response.data.hdmis_number);
+                            setSubmittedName(fullName);
+                            sendHdmisEmail(response.data.hdmis_number);
+                        } else {
+                            alert("Failed to generate HDMIS number");
+                        }
+                    } catch (error) {
+                        alert("Failed to store user data");
+                    }
+                } else {
+                    if (!fullName || !email || !phoneNumber || !password) {
+                        alert("Please fill all fields correctly");
+                        return;
+                    }
+                    try {
+                        const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeManualUser`, {
+                            full_name: fullName, email, phone_number: phoneNumber, password
+                        });
+        
+                        if (response.data.hdmis_number) {
+                            setHdmisNumber(response.data.hdmis_number);
+                            setSubmittedName(fullName);
+                            sendHdmisEmail(response.data.hdmis_number);
+                        } else {
+                            alert("Failed to generate HDMIS number");
+                        }
+                    } catch (error) {
+                        alert("Failed to store user data");
+                    }
+                }
+            };
     // 2️⃣ Function to send OTP to fetched email
     const sendOtp = async (email) => {
         try {
@@ -167,9 +218,16 @@ const CreateHDMISNumber = () => {
                     <input type="password" className="form-control mb-3" placeholder="Password *"
                         value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-                    <button type="button" className="btn btn-success w-100" onClick={() => alert("Submit logic here!")}>
+                    <button type="button" className="btn btn-success w-100" onClick={handleSubmit} >
                         Submit
                     </button>
+                    {hdmisNumber && submittedName && (
+                        <div className="mt-4 text-center">
+                            <h4>✅ HDMIS Number Created</h4>
+                            <p><strong>Name:</strong> {submittedName}</p>
+                            <p><strong>HDMIS Number:</strong> {hdmisNumber}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
