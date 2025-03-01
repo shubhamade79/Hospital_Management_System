@@ -1,674 +1,676 @@
  /* Global Font Family */
-        body {
-            font-family: 'Roboto', Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-        }
-
-        /* White Stripe Styling */
-        .white-stripe {
-            background-color: #FCFAEE;
-            height: 75px;
-            display: flex;
-            /* justify-content: center; */
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .white-stripe .brand-logo {
-            height: 50px;
-            margin-right: 10px;
-            margin-left: 130px;
-        }
-
-        .white-stripe .brand-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #373743;
-        }
-
-        /* Custom Navbar Styling */
-        .navbar {
-            background-color: rgb(38, 68, 136);
-            box-shadow: 0 2px 4px #373743;
-            margin-bottom: 0;
-        }
-
-        .navbar-brand {
-            color: #ffffff;
-        }
-
-        .navbar-logo {
-            height: 30px;
-            margin-right: 10px;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff;
-            font-weight: 500;
-            margin-right: 15px;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: rgb(163, 73, 28);
-        }
-
-        .navbar-nav .dropdown-menu {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-nav .dropdown-toggle img {
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .navbar-nav .nav-item .nav-link i {
-            font-size: 1.5rem;
-        }
-
-        .navbar-nav .btn {
-            margin-left: 10px;
-        }
-
-        /* Custom Button Styling */
-        .btn-custom {
-            background-color: #d66025;
-            color: white;
-            border: none;
-        }
-
-        .btn-custom:hover {
-            background-color: rgba(163, 73, 28, 0.8);
-            color: white;
-        }
-
-        /* Custom Hero Section */
-        .hero {
-            background-color: #f8f9fa;
-            height: 60vh;
-            display: flex;
-            align-items: center;
-            padding-top: 0;
-            margin-top: 0;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: rgb(38, 68, 136);
-        }
-
-        .hero h2 {
-            font-size: 1.5rem;
-            color: #373743;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: #6c757d;
-            margin-bottom: 20px;
-        }
-
-        .hero .btn {
-            background-color: #d66025;
-            border: none;
-            color: #fff;
-            font-size: 1rem;
-            padding: 10px 20px;
-        }
-
-        .hero .btn:hover {
-            background-color: #DDA853;
-        }
-
-        .hero img {
-            max-width: 100%;
-            height: auto;
-        }
-
-
-        /* About Section */
-
-        .benefits-section {
-            background-color: #2d4787;
-            /* Blue background */
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .benefits-section h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .benefits-section p {
-            font-size: 1rem;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto 40px;
-        }
-
-        .cards {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            color: #333;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 250px;
-            flex: 1 1 calc(25% - 20px);
-            /* Flexible grid layout */
-        }
-
-        .card img {
-            width: 50px;
-            height: auto;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        @media (max-width: 768px) {
-            .card {
-                flex: 1 1 calc(50% - 20px);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                flex: 1 1 100%;
-            }
-        }
-
-
-        /* FAQs Section */
-
-        .faq-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: auto;
-            /* background-color: #16404D; */
-        }
-
-        .faq-support {
-            flex: 1;
-            margin-right: 40px;
-        }
-
-        .faq-support h2 {
-            font-size: 2.5rem;
-            color: #2d4787;
-            margin-bottom: 10px;
-        }
-
-        .faq-support h4 {
-            font-size: 1rem;
-            color: #FBF5DD;
-            margin-bottom: 20px;
-        }
-
-        .faq-support p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            color: #DDA853;
-        }
-
-        .faq-support button {
-            background-color: #e77624;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .faq-accordion {
-            flex: 2;
-        }
-
-        .faq-item {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-
-        .faq-item button {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            background: white;
-            color: #2d4787;
-            padding: 15px 20px;
-            border: none;
-            font-size: 1rem;
-            text-align: left;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .faq-item button:focus {
-            outline: none;
-        }
-
-        .faq-item .content {
-            padding: 15px 20px;
-            display: none;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .faq-item.active .content {
-            display: block;
-        }
-
-        .faq-item button span {
-            transform: rotate(0);
-            transition: transform 0.3s ease;
-        }
-
-        .faq-item.active button span {
-            transform: rotate(180deg);
-        }
-
-        .know-more {
-            text-align: right;
-            margin-top: 20px;
-        }
-
-        .know-more a {
-            color: #2d4787;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-
-        .know-more a:hover {
-            text-decoration: underline;
-        }
-
-
-        /* Custom Footer Section */
-
-        .footer {
-            background-color: #f8f9fa;
-            padding: 40px 0;
-        }
-
-        .footer h5 {
-            font-weight: bold;
-        }
-
-        .footer ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer ul li a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        .footer ul li a:hover {
-            text-decoration: underline;
-        }
-
-
-        /* Logins sections  */
-
-        /* Logins Section Styles */
-        .our-blog {
-            padding: 80px 50px;
-            background-color: #FBF5DD;
-            padding-bottom: 100px;
-        }
-
-        .our-blog .blog-cont {
-            float: none;
-            margin: auto;
-        }
-
-        .our-blog .blog-single {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 40px;
-        }
-
-        .our-blog .blog-single .figure {
-            margin-bottom: 0px;
-        }
-
-        .our-blog .blog-single-det {
-            margin: auto;
-            padding: 20px;
-            z-index: 99;
-            width: 90%;
-            position: relative;
-            margin-top: -80px;
-            background-color: #FCFAEE;
-            border-radius: 5px;
-        }
-
-        .our-blog .blog-single-det .btn {
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .our-blog .blog-single-det span {
-            font-size: 13px;
-            color: #b5316a;
-        }
-
-        .our-blog .blog-single-det h6 {
-            font-size: 1.3rem;
-        }
-
-        .our-blog .blog-single-det p {
-            margin-top: 15px;
-            margin-bottom: 15px;
-            font-size: 1rem;
-        }
-
-        .btn-success {
-            background-color: #00ab9f;
-            border-color: #00ab9f;
-        }
-
-        .btn-success:hover {
-            background-color: #00ab9f !important;
-            border-color: #00ab9f !important;
-        }
-
-        .btn-success:active {
-            background-color: #00ab9f !important;
-            border-color: #00ab9f !important;
-        }
-
-        .btn-success:focus {
-            background-color: #00ab9f !important;
-            border-color: #00ab9f !important;
-            box-shadow: none !important;
-        }
-
-        .btn {
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-            border-radius: 7px;
-        }
-
-        .inner-title {
-            padding: 20px;
-            padding-left: 0px;
-            margin-bottom: 30px;
-        }
-
-        .inner-title h1 {
-            width: 100%;
-            text-align: center;
-            font-size: 2rem;
-            font-family: "slab", Arial, Helvetica, sans-serif;
-        }
-
-
-        /* 22 JAN 2025 06:17 PM */
-        
-
-        /* Hero Section */
-        .hero {
-            background-color: #FBF5DD;
-            /* Subtle dark tone */
-            color: #16404D;
-            /* Light text */
-        }
-
-        .hero h1 {
-            color: #e74c3c;
-            /* Strong primary */
-        }
-
-        .hero h2 {
-            color: #16404D;
-            /* Supporting text */
-        }
-
-        .hero .btn {
-            background-color: #e67e22;
-            /* Vibrant button */
-        }
-
-        /* Benefits Section */
-        .benefits-section {
-            background-color: #16404D;
-            /* Cool tone */
-            color: #ecf0f1;
-            /* Light text */
-        }
-
-        .card {
-            background-color: #fbf5dd;
-            /* Neutral card background */
-            color: #16404D;
-            /* Light text */
-        }
-
-        /* FAQ Section */
-        .faq-support h2 {
-            color: #e67e22;
-            /* Highlight FAQ title */
-        }
-
-        .faq-item button {
-            background: #16404D;
-            /* Button background */
-            color: #ecf0f1;
-            /* Text color */
-        }
-
-        .faq-item.active button {
-            background: #e67e22;
-            /* Active state */
-        }
-
-        /* Footer */
-        .footer {
-            background-color: #fbf5dd;
-            color: #DDA853;
-        }
-
-        .footer ul li a {
-            color: #f39c12;
-        }
-
-        /* 22 JAN 2025 11:27 PM */
-
-        .our-blog .blog-single img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-
-        .our-blog h6 {
-            color: #68716c;
-        }
-
-
-        .our-blog h1,
-        .our-blog h6 {
-            font-family: 'Roboto', sans-serif;
-            font-weight: 700;
-            font-size: 28px;
-            color: #16404D;
-        }
-
-        /* 22 JAN 2025 11:27 PM */
-
-        .hero .login-button {
-            font-family: 'Roboto', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: #009990 !important;
-        }
-
-
-        .white-stripe {
-            display: flex;
-            justify-content: space-between;
-            /* Distributes the space between image and button */
-            align-items: center;
-            /* Centers the content vertically */
-        }
-
-        .white-stripe .brand-logo {
-            height: auto;
-            max-width: 100px;
-        }
-
-        .white-stripe .btn {
-            background-color: #d66025;
-            border: none;
-            color: #fff;
-            font-size: 1rem;
-            padding: 10px;
-            margin-right: 150px;
-            margin-bottom: 10px;
-            border-radius: 7px;
-        }
-
-        .white-stripe .btn:hover {
-            background-color: #DDA853;
-        }
-
-        .white-stripe .btn a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .white-stripe .btn a:hover {
-            color: #fff;
-        }
-
-
-        /* White Stripe Styling */
-        .white-stripe {
-            background-color: #FCFAEE;
-            height: 75px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .white-stripe .brand-logo {
-            height: 50px;
-        }
-
-        .white-stripe .btn {
-            background-color: #d66025;
-            border: none;
-            color: #fff;
-            font-size: 1rem;
-            padding: 10px 20px;
-            border-radius: 7px;
-        }
-
-        .white-stripe .btn:hover {
-            background-color: #DDA853;
-        }
-
-        .white-stripe .btn a {
-            color: #fff;
-            text-decoration: none;
-        }
+ body {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+}
+
+/* White Stripe Styling */
+.white-stripe {
+    background-color: #FCFAEE;
+    height: 75px;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.white-stripe .brand-logo {
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 130px;
+}
+
+.white-stripe .brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #373743;
+}
+
+/* Custom Navbar Styling */
+.navbar {
+    background-color: rgb(38, 68, 136);
+    box-shadow: 0 2px 4px #373743;
+    margin-bottom: 0;
+}
+
+.navbar-brand {
+    color: #ffffff;
+}
+
+.navbar-logo {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff;
+    font-weight: 500;
+    margin-right: 15px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgb(163, 73, 28);
+}
+
+.navbar-nav .dropdown-menu {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.navbar-nav .dropdown-toggle img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navbar-nav .nav-item .nav-link i {
+    font-size: 1.5rem;
+}
+
+.navbar-nav .btn {
+    margin-left: 10px;
+}
+
+/* Custom Button Styling */
+.btn-custom {
+    background-color: #d66025;
+    color: white;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: rgba(163, 73, 28, 0.8);
+    color: white;
+}
+
+/* Custom Hero Section */
+.hero {
+    padding:20px 0 20px 0;
+    background-color: #f8f9fa;
+    max-height: 700px;
+    display: flex;
+    align-items: center;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: rgb(38, 68, 136);
+}
+
+.hero h2 {
+    font-size: 1.5rem;
+    color: #373743;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.hero .btn {
+    background-color: #d66025;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 10px 20px;
+}
+
+.hero .btn:hover {
+    background-color: #DDA853;
+}
+
+.hero img {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* About Section */
+
+.benefits-section {
+    background-color: #2d4787;
+    /* Blue background */
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.benefits-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.benefits-section p {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 250px;
+    flex: 1 1 calc(25% - 20px);
+    /* Flexible grid layout */
+}
+
+.card img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .card {
+        flex: 1 1 calc(50% - 20px);
+    }
     
+}
 
-        .navbar {
-            background-color: #16404D;
-            display: flex;
-            list-style: none;
-        }
-
-        .navbar-nav .nav-link {
-            color: #DDA853;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #f39c12;
-        }
-
-        .login-container {
-            margin-top: 50px;
-        }
-
-        .login-container .box-login {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-container .btn-primary {
-            background-color: #16404D;
-            border: none;
-        }
-
-        .login-container .btn-primary:hover {
-            background-color: #DDA853;
-        }
+@media (max-width: 480px) {
+    .card {
+        flex: 1 1 100%;
+    }
+}
 
 
-        /* For Create_HDMIS */
-        .tab-pane {
-            padding: 20px;
-            background: white;
-            border: 1px solid #ddd;
-            border-top: none;
-            border-radius: 0 0 10px 10px;
-        }
+/* FAQs Section */
 
-        .step-header {
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-        }
+.faq-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 50px 20px;
+    max-width: 1200px;
+    margin: auto;
+    /* background-color: #16404D; */
+}
 
-        .form-control[readonly] {
-            background-color: #e9ecef;
-        }
+.faq-support {
+    flex: 1;
+    margin-right: 40px;
+}
 
-        .btn-next {
-            background-color: #16404D;
-            color: white;
-        }
+.faq-support h2 {
+    font-size: 2.5rem;
+    color: #2d4787;
+    margin-bottom: 10px;
+}
 
-        .btn-next:hover {
-            background-color: #DDA853;
-        }
+.faq-support h4 {
+    font-size: 1rem;
+    color: #FBF5DD;
+    margin-bottom: 20px;
+}
+
+.faq-support p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: #DDA853;
+}
+
+.faq-support button {
+    background-color: #e77624;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.faq-accordion {
+    flex: 2;
+}
+
+.faq-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.faq-item button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: white;
+    color: #2d4787;
+    padding: 15px 20px;
+    border: none;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.faq-item button:focus {
+    outline: none;
+}
+
+.faq-item .content {
+    padding: 15px 20px;
+    display: none;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.faq-item.active .content {
+    display: block;
+}
+
+.faq-item button span {
+    transform: rotate(0);
+    transition: transform 0.3s ease;
+}
+
+.faq-item.active button span {
+    transform: rotate(180deg);
+}
+
+.know-more {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.know-more a {
+    color: #2d4787;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.know-more a:hover {
+    text-decoration: underline;
+}
+
+
+/* Custom Footer Section */
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 40px 0;
+}
+
+.footer h5 {
+    font-weight: bold;
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer ul li a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.footer ul li a:hover {
+    text-decoration: underline;
+}
+
+
+/* Logins sections  */
+
+/* Logins Section Styles */
+.our-blog {
+    padding: 80px 50px;
+    background-color: #FBF5DD;
+    padding-bottom: 100px;
+}
+
+.our-blog .blog-cont {
+    float: none;
+    margin: auto;
+}
+
+.our-blog .blog-single {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.our-blog .blog-single .figure {
+    margin-bottom: 0px;
+}
+
+.our-blog .blog-single-det {
+    margin: auto;
+    padding: 20px;
+    z-index: 99;
+    width: 90%;
+    position: relative;
+    margin-top: -80px;
+    background-color: #FCFAEE;
+    border-radius: 5px;
+}
+
+.our-blog .blog-single-det .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.our-blog .blog-single-det span {
+    font-size: 13px;
+    color: #b5316a;
+}
+
+.our-blog .blog-single-det h6 {
+    font-size: 1.3rem;
+}
+
+.our-blog .blog-single-det p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+.btn-success {
+    background-color: #00ab9f;
+    border-color: #00ab9f;
+}
+
+.btn-success:hover {
+    background-color: #00ab9f !important;
+    border-color: #00ab9f !important;
+}
+
+.btn-success:active {
+    background-color: #00ab9f !important;
+    border-color: #00ab9f !important;
+}
+
+.btn-success:focus {
+    background-color: #00ab9f !important;
+    border-color: #00ab9f !important;
+    box-shadow: none !important;
+}
+
+.btn {
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 7px;
+}
+
+.inner-title {
+    padding: 20px;
+    padding-left: 0px;
+    margin-bottom: 30px;
+}
+
+.inner-title h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    font-family: "slab", Arial, Helvetica, sans-serif;
+}
+
+
+/* 22 JAN 2025 06:17 PM */
+
+
+/* Hero Section */
+.hero {
+    background-color: #FBF5DD;
+    /* Subtle dark tone */
+    color: #16404D;
+    /* Light text */
+}
+
+.hero h1 {
+    color: #e74c3c;
+    /* Strong primary */
+}
+
+.hero h2 {
+    color: #16404D;
+    /* Supporting text */
+}
+
+.hero .btn {
+    background-color: #e67e22;
+    /* Vibrant button */
+}
+
+/* Benefits Section */
+.benefits-section {
+    background-color: #16404D;
+    /* Cool tone */
+    color: #ecf0f1;
+    /* Light text */
+}
+
+.card {
+    background-color: #fbf5dd;
+    /* Neutral card background */
+    color: #16404D;
+    /* Light text */
+}
+
+/* FAQ Section */
+.faq-support h2 {
+    color: #e67e22;
+    /* Highlight FAQ title */
+}
+
+.faq-item button {
+    background: #16404D;
+    /* Button background */
+    color: #ecf0f1;
+    /* Text color */
+}
+
+.faq-item.active button {
+    background: #e67e22;
+    /* Active state */
+}
+
+/* Footer */
+.footer {
+    background-color: #fbf5dd;
+    color: #DDA853;
+}
+
+.footer ul li a {
+    color: #f39c12;
+}
+
+/* 22 JAN 2025 11:27 PM */
+
+.our-blog .blog-single img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+
+.our-blog h6 {
+    color: #68716c;
+}
+
+
+.our-blog h1,
+.our-blog h6 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #16404D;
+}
+
+/* 22 JAN 2025 11:27 PM */
+
+.hero .login-button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #009990 !important;
+}
+
+
+.white-stripe {
+    display: flex;
+    justify-content: space-between;
+    /* Distributes the space between image and button */
+    align-items: center;
+    /* Centers the content vertically */
+}
+
+.white-stripe .brand-logo {
+    height: auto;
+    max-width: 100px;
+}
+
+.white-stripe .btn {
+    background-color: #d66025;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 10px;
+    margin-right: 150px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+}
+
+.white-stripe .btn:hover {
+    background-color: #DDA853;
+}
+
+.white-stripe .btn a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.white-stripe .btn a:hover {
+    color: #fff;
+}
+
+
+/* White Stripe Styling */
+.white-stripe {
+    background-color: #FCFAEE;
+    height: 75px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.white-stripe .brand-logo {
+    height: 50px;
+}
+
+.white-stripe .btn {
+    background-color: #d66025;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+
+.white-stripe .btn:hover {
+    background-color: #DDA853;
+}
+
+.white-stripe .btn a {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.navbar {
+    background-color: #16404D;
+    display: flex;
+    list-style: none;
+}
+
+.navbar-nav .nav-link {
+    color: #DDA853;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f39c12;
+}
+
+.login-container {
+    margin-top: 50px;
+}
+
+.login-container .box-login {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-container .btn-primary {
+    background-color: #16404D;
+    border: none;
+}
+
+.login-container .btn-primary:hover {
+    background-color: #DDA853;
+}
+
+
+/* For Create_HDMIS */
+.tab-pane {
+    padding: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.step-header {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.form-control[readonly] {
+    background-color: #e9ecef;
+}
+
+.btn-next {
+    background-color: #16404D;
+    color: white;
+}
+
+.btn-next:hover {
+    background-color: #DDA853;
+}

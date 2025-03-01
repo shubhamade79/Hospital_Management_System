@@ -1,60 +1,65 @@
 /* Benefits Section Styling */
 .benefits-section {
-    padding: 50px 0;
-    background-color: #f4f4f9;
-    text-align: center;
-  }
-  
-  .benefits-section h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .benefits-section p {
-    font-size: 1.1em;
-    margin-bottom: 40px;
-    color: #666;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .cards {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 250px;
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .card:hover {
-    transform: translateY(-10px);
-  }
-  
-  .card img {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 20px;
-  }
-  
-  .card h3 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .card p {
-    font-size: 1em;
-    color: #555;
-  }
-  
+  padding: 50px 0;
+  width:90%;
+  margin:auto;
+  /* background-color: #f4f4f9; */
+  text-align: center;
+}
+
+.benefits-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color:rgb(216, 216, 216) ;
+}
+
+.benefits-section p {
+  font-size: 1.2em;
+  margin-bottom: 40px;
+  color:rgb(216, 216, 216) ;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.cards div{
+  background-color: #f3f3f3;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+.card img {
+  object-fit:contain;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.card h3 {
+  font-size: 1.5em;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.card p {
+  font-size: 1em;
+  color: #2c3e50;
+}

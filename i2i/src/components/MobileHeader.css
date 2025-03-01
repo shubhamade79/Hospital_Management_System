@@ -1,63 +1,85 @@
 /* Mobile Header Styling */
 .mobile-header {
-    background-color: #000; /* Black background for the entire header */
-  }
-  
-  .navbar {
-    background-color: #000; /* Black background for the navbar */
-    padding: 10px 0;
-  }
-  
-  .navbar-brand {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    margin-left: 0; /* Remove any left margin */
-  }
-  
+  background-color: #000; /* Black background for the entire header */
+}
+
+.navbar {
+  background-color: #000; /* Black background for the navbar */
+  padding: 10px 0;
+}
+.nav_bg_color{
+  background-color: #15404d;
+
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-left: 0; /* Remove any left margin */
+}
+
+.navbar-logo img {
+  padding-left:20px;
+  width: 90px;  /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+@media (max-width: 768px) {
   .navbar-logo img {
-    width: 80px;  /* Adjust width as needed */
-    height: auto; /* Maintain aspect ratio */
+
+    width: 60px; /* Smaller logo for mobile */
   }
-  
-  @media (max-width: 768px) {
-    .navbar-logo img {
-      width: 60px; /* Smaller logo for mobile */
-    }
-  }
-  
-  
-  .mobile-header .navbar-nav .nav-item .nav-link {
-    color: #fff; /* White text color for links */
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 15px;
-  }
-  
-  .mobile-header .navbar-nav .nav-item .nav-link:hover {
-    color: #FFD700; /* Golden color for hover effect */
-    text-decoration: none;
-  }
-  
-  .mobile-header .navbar-toggler-icon {
-    background-color: #fff; /* White icon color for toggler */
-  }
-  
-  .mobile-header .container-fluid {
-    padding-left: 0; /* Remove any left padding */
-    padding-right: 0; /* Remove any right padding */
-  }
-  /* Ensures smooth transition for mobile nav */
+}
+
+
+.mobile-header .navbar-nav .nav-item .nav-link {
+  color: #fff; /* White text color for links */
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 15px;
+  width:50%;
+}
+
+.mobile-header .navbar-nav .nav-item .nav-link:hover {
+  color: #FFD700; /* Golden color for hover effect */
+  text-decoration: none;
+
+}
+
+.mobile-header .navbar-toggler-icon {
+  background-color: #fff; /* White icon color for toggler */
+}
+
+.mobile-header .container-fluid {
+  padding-left: 0; /* Remove any left padding */
+  padding-right: 0; /* Remove any right padding */
+}
+/* Ensures smooth transition for mobile nav */
 .nav-menu {
-  transition: transform 0.3s ease-in-out;
+transition: transform 0.3s ease-in-out;
 }
 
 /* Hide the mobile menu by default */
 .nav-hidden {
-  transform: translateY(-100%);
+transform: translateY(-100%);
+}
+.nav_button{
+background-color: #f8f9fa;
+background-color: #FBF5DD;
+
+
+}
+.nav_button:hover{
+background-color: #FBF5DD;
+color:black;  
 }
 
 /* Show menu when toggled */
 .nav-visible {
-  transform: translateY(0);
+transform: translateY(0);
+}
+
+
+.nav_width{
+width: 50%;
 }

@@ -11,7 +11,7 @@ const ReceptionAppointment = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const receptionId = localStorage.getItem("reception_id");
-  console.log("Reception Id : ", receptionId);
+  console.log("Reception Id:", receptionId);
 
   useEffect(() => {
     if (!receptionId) {
@@ -25,30 +25,28 @@ const ReceptionAppointment = () => {
     try {
       const todayDate = new Date().toLocaleDateString("en-CA"); // "YYYY-MM-DD" format
       console.log("Corrected Today's Date:", todayDate);
-  
+
       if (!receptionId) {
         console.error("No receptionId found!");
         return;
       }
-  
+
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/get-appointments`, {
         params: { reception_id: receptionId, date: todayDate },
       });
-  
+
       console.log("API Response:", response.data);
-      
+
       if (!response.data || !Array.isArray(response.data.appointments)) {
         throw new Error("Invalid response format");
       }
-  
+
       setAppointments(response.data.appointments);
     } catch (error) {
       console.error("Error fetching appointments:", error);
       setErrorMessage("Failed to fetch appointments. Please try again later.");
     }
   };
-  
-  
 
   // Redirect to the Add Appointment Page
   const handleAddAppointment = () => {
@@ -68,29 +66,28 @@ const ReceptionAppointment = () => {
       return aHours !== bHours ? aHours - bHours : aMinutes - bMinutes;
     });
 
-    // Delete Appointment
-    const deleteAppointment = async (appointment_id) => {
-      if (window.confirm("Are you sure you want to delete this appointment?")) {
-        try {
-          await axios.delete(`${process.env.REACT_APP_API_URL}/delete-appointment/${appointment_id}`);
-          setAppointments(appointments.filter((appointment) => appointment.appointment_id !== appointment_id));
-          alert("Appointment deleted successfully!");
-        } catch (error) {
-          console.error("Error deleting appointment:", error);
-          alert("Failed to delete appointment.");
-        }
+  // Delete Appointment
+  const deleteAppointment = async (appointment_id) => {
+    if (window.confirm("Are you sure you want to delete this appointment?")) {
+      try {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/delete-appointment/${appointment_id}`);
+        setAppointments(appointments.filter((appointment) => appointment.appointment_id !== appointment_id));
+        alert("Appointment deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting appointment:", error);
+        alert("Failed to delete appointment.");
       }
-    };
-    
+    }
+  };
 
   return (
     <div>
       <Header />
       <div className="">
-        <h2 className="text-center my-4">Today's Appointments</h2>
+        <h2 className="text-center my-4">Today's Appointments ({filteredAppointments.length})</h2>
         {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
 
-        {/* Add Appointment Button */}
+        {/* Add Appointment Button and Search */}
         <div className="d-flex justify-content-between mb-3">
           <input
             type="text"
@@ -99,10 +96,13 @@ const ReceptionAppointment = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="btn " onClick={handleAddAppointment}>
+          <button className="btn btn-primary" onClick={handleAddAppointment}>
             + Add Appointment
           </button>
         </div>
+
+        {/* Total Appointments Count */}
+        <p className="text-center fw-bold">Total Appointments Today: {filteredAppointments.length}</p>
 
         {/* Appointments Table */}
         <div className="appointment-list">
@@ -129,14 +129,13 @@ const ReceptionAppointment = () => {
                     <td>{appointment.time}</td>
                     <td>{appointment.status}</td>
                     <td>
-                    <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() => deleteAppointment(appointment.appointment_id)}
-                            >
-                              🗑 Delete
-                            </button>
-
-                      </td>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => deleteAppointment(appointment.appointment_id)}
+                      >
+                        🗑 Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

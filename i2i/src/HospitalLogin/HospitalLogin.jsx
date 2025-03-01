@@ -163,19 +163,19 @@ const resetPassword = async () => {
         <div className="row justify-content-center">
           <div className="">
             <div className="box-login">
+              
+              <form onSubmit={handleLogin} className="form-login">
+              <fieldset style={{border:"none"}}>
               <div className="text-center mb-4">
                 <h2>HDMIS | Hospital Login</h2>
               </div>
-              <form onSubmit={handleLogin} className="form-login">
-                <fieldset>
                   <legend className="text-center">Sign in to your account</legend>
                   <p className="text-muted text-center">
                     Please enter your ID and password to log in.
                   </p>
 
                   <div className="form-group mb-3">
-                    <div className="input-group">
-                      <span className="input-group-text"><i className="fas fa-user-tag"></i></span>
+                    <div className="input-group d-flex align-items-center justify-content-center">
                       <select
                         id="loginAs"
                         className="form-select"
@@ -184,6 +184,7 @@ const resetPassword = async () => {
                         required
                       >
                         <option value="" disabled>
+                        <i class="bi bi-box-arrow-in-left"></i>
                           Login as
                         </option>
                         <option value="Doctor">Doctor</option>
@@ -196,7 +197,7 @@ const resetPassword = async () => {
                   {selectedRole && (
                     <div className="form-group mb-3">
                       <div className="input-group">
-                        <span className="input-group-text"><i className="fas fa-id-badge"></i></span>
+                        {/* <span className="input-group-text_1"><i className="fas fa-id-badge"></i></span> */}
                         <input
                           type="text"
                           className="form-control"
@@ -230,7 +231,7 @@ const resetPassword = async () => {
 
                   <div className="form-actions text-center">
                     <button type="submit" className="btn btn-primary w-100">
-                      Login <i className="fas fa-arrow-circle-right"></i>
+                      Login 
                     </button>
                   </div>
                 </fieldset>

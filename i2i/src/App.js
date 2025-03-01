@@ -19,6 +19,7 @@ import PatientDashboard from "./PatientDashboard/PatientDashboard";
 import ForgotPassword from "./components/ForgotPassword";
 import ContactUs from "./Home/ContactUs";
 import Profile from "./components/Profile";
+import PatientProfile from "./PatientProfile/PatientProfile";
 function App() {
   return (
     <Router>
@@ -42,6 +43,8 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/patient/:hdmisId" element={<PatientProfile />} />
+
 
       </Routes>
     </Router>

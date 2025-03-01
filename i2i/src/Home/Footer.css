@@ -1,0 +1,8 @@
+.footer-social a{
+    margin:10px;
+    color: #16404D;
+
+}
+.footer-social a:hover{
+    color: #16404db3;
+}

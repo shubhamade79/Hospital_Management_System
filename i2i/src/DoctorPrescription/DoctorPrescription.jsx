@@ -82,6 +82,7 @@ const DoctorPrescription = () => {
         hdmis_number: hdmisNumber,
         disease,
         doctor_id,
+        admin_id:doctorData?.admin_id,
         hospital_state: doctorData?.hospital_state,
         hospital_city: doctorData?.hospital_city,
         hospital_name: doctorData?.hospital_name,
@@ -103,57 +104,80 @@ const DoctorPrescription = () => {
   const generatePDF = () => {
     const doc = new jsPDF();
     
+    // Page width for right alignment
+    const pageWidth = doc.internal.pageSize.width;
+    
     // Header
     doc.setFont("helvetica", "bold");
-    doc.text(`${doctorData?.hospital_name}`, 60, 15);
+    doc.setFontSize(14);
+    doc.text(`${doctorData?.hospital_name || "Hospital Name"}`, 10, 15);
+
     doc.setFontSize(10);
-    doc.text(`${doctorData?.hospital_address},${doctorData?.hospital_city},${doctorData?.hospital_state}`, 80, 22);
-    doc.text("Phone: +91 98765 43210", 85, 27);
-    doc.text("Email: info@snshospital.com", 80, 32);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 160, 15);
-    doc.line(10, 35, 200, 35);
+    doc.text(`${doctorData?.hospital_address || "Address"}, ${doctorData?.hospital_city || "City"}, ${doctorData?.hospital_state || "State"}`, 10, 22);
+    doc.text("Phone: +91 98765 43210", 10, 27);
+    doc.text("Email: info@snshospital.com", 10, 32);
+
+    // Right-aligned Date
+    const dateText = `Date: ${new Date().toLocaleDateString()}`;
+    doc.text(dateText, pageWidth - 10, 15, { align: "right" });
+
+    doc.line(10, 40, 200, 40); // Horizontal line
 
     // Patient Details
     doc.setFontSize(12);
-    doc.text("Patient Details", 10, 42);
+    doc.text("Patient Details", 10, 50);
     doc.setFontSize(10);
-    doc.text(`Name: ${userData?.full_name || "N/A"}`, 10, 50);
-    doc.text(`Age: ${userData?.age || "N/A"} | Gender: ${userData?.gender || "N/A"}`, 10, 55);
-    doc.text(`HDMIS No: ${userData?.hdmis_number || "N/A"}`, 150, 50);
-    doc.line(10, 60, 200, 60);
+    doc.text(`Name: ${userData?.full_name || "N/A"}`, 10, 58);
+    doc.text(`Age: ${userData?.age || "N/A"}  |  Gender: ${userData?.gender || "N/A"}`, 10, 64);
+    doc.text(`HDMIS No: ${userData?.hdmis_number || "N/A"}`, 150, 58);
+    doc.line(10, 70, 200, 70);
 
     // Disease
     doc.setFontSize(12);
-    doc.text("Clinical Complaints", 10, 68);
+    doc.text("Clinical Complaints", 10, 78);
     doc.setFontSize(10);
-    doc.text(`Disease: ${disease || "N/A"}`, 15, 75);
-    doc.line(10, 85, 200, 85);
+    doc.text(`Disease: ${disease || "N/A"}`, 15, 85);
+    doc.line(10, 95, 200, 95);
 
     // Medicine Table
     doc.setFontSize(12);
-    doc.text("Prescribed Medication", 10, 93);
-    const tableBody = medicines.map((med) => [med.name || "N/A", med.dosage || "N/A", med.advice || "N/A"]);
+    doc.text("Prescribed Medication", 10, 103);
 
-    doc.autoTable({
-      startY: 100,
-      head: [["Medicine", "Dosage", "Advice"]],
-      body: tableBody,
-      theme: "grid",
-      styles: { fontSize: 10, cellPadding: 2 },
-      headStyles: { fillColor: [41, 128, 185], textColor: 255, fontStyle: "bold" },
+    // Table Headers
+    const startY = 110;
+    doc.setFont("helvetica", "bold");
+    doc.text("Medicine", 10, startY);
+    doc.text("Dosage", 80, startY);
+    doc.text("Advice", 140, startY);
+    doc.line(10, startY + 3, 200, startY + 3); // Horizontal line
+
+    // Medicine List
+    doc.setFont("helvetica", "normal");
+    medicines.forEach((med, index) => {
+        const y = startY + 10 + index * 10;
+        doc.text(med.name || "N/A", 10, y);
+        doc.text(med.dosage || "N/A", 80, y);
+        doc.text(med.advice || "N/A", 140, y);
     });
 
+    // Adjust final Y position based on medicines list
+    let finalY = startY + 10 + medicines.length * 10;
+
+    doc.line(10, finalY + 5, 200, finalY + 5); // Horizontal line after medicines
+
     // Doctor Details
-    let finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(12);
-    doc.text("Doctor Details", 10, finalY);
+    doc.text("Doctor Details", 10, finalY + 15);
     doc.setFontSize(10);
-    doc.text(`Name: ${doctorData?.name || "N/A"}`, 10, finalY + 7);
-    doc.text(`Specialization: ${doctorData?.specialization || "N/A"}`, 10, finalY + 12);
-    doc.text("Doctor's Signature: ___________", 140, finalY + 20);
+    doc.text(`Name: ${doctorData?.full_name || "N/A"}`, 10, finalY + 22);
+    doc.text(`Specialization: ${doctorData?.specialization || "N/A"}`, 10, finalY + 28);
+    doc.text("Doctor's Signature: ___________", 140, finalY + 35);
 
     return doc;
-  };
+};
+
+
+
   const handleViewPDF = () => {
     const doc = generatePDF();
     window.open(doc.output("bloburl"), "_blank");

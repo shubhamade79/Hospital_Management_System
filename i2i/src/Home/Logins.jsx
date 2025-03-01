@@ -1,6 +1,8 @@
 import React from "react";
+import "./Logins.css";
 import { Link } from "react-router-dom"; // Import Link
-
+import hospital_login_img from "./Home_img/admin.jpg";
+import patient_login_img from "./Home_img/patient.jpg";
 const Logins = () => {
   return (
     <section id="logins" className="our-blog container-fluid">
@@ -8,11 +10,12 @@ const Logins = () => {
         <div className="inner-title text-center">
           <h1>Logins</h1>
         </div>
-        <div className="row d-flex justify-content-between">
+        <div className="row d-flex justify-content-center">
           
           {/* Patient Login - Left Side */}
           <div className="col-sm-5 blog-smk">
             <div className="blog-single text-center">
+            <img src={patient_login_img} alt="patient login" />
               <div className="blog-single-det">
                 <h6>Patient Login</h6>
                 <Link to="/patient-login">
@@ -25,6 +28,7 @@ const Logins = () => {
           {/* Hospital Login - Right Side */}
           <div className="col-sm-5 blog-smk">
             <div className="blog-single text-center">
+            <img src={hospital_login_img} alt="patient login" />
               <div className="blog-single-det">
                 <h6>Hospital Login</h6>
                 <Link to="/hospital-login">

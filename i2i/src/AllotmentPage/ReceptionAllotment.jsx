@@ -20,7 +20,7 @@ const ReceptionAllotment = () => {
         user_id: generateRandomString(),  // Generate user_id once
         password: generateRandomString(), // Generate password once
         contact: "",
-        name: "",
+        full_name: "",
         hospital_name: "",
         email: "",  // Add email field
     });
@@ -70,9 +70,9 @@ const ReceptionAllotment = () => {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { user_id, password, contact, email, name, hospital_name, hospital_address, hospital_city, hospital_state } = receptionDetails;
+        const { user_id, password, contact, email, full_name, hospital_name, hospital_address, hospital_city, hospital_state } = receptionDetails;
 
-        if (!contact || !name || !email || !hospital_name || !hospital_address) {
+        if (!contact || !full_name || !email || !hospital_name || !hospital_address) {
             setErrorMessage("All fields are required.");
             return;
         }
@@ -83,7 +83,7 @@ const ReceptionAllotment = () => {
                 password,
                 admin_id: localStorage.getItem("user_id"),
                 contact,
-                name,
+                full_name,
                 hospital_name,
                 hospital_address,
                 hospital_city,

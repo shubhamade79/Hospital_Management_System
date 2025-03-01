@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style1.css'; // Ensure your CSS styles for this component are available
 import { Link } from "react-router-dom"; // Import Link from React Router
-
+import './Support.css';
 // Data for FAQ items
 const faqData = [
   {
@@ -40,12 +40,12 @@ const Support = () => {
     <section className="faq-section">
       {/* Support Text */}
       <div className="faq-support">
-        <h4>Support</h4>
+        <h3 style={{color:"white"}}>Support</h3>
         <h2>FAQ's</h2>
         <p>
           Everything you need to know about the HDMIS number. Can't find the answers you are looking for?
         </p>
-        <Link to="/contact"className="btn btn-primary">Contact Us</Link>
+        <Link to="/contact"className="btn Contact_us_btn">Contact Us</Link>
       </div>
 
       {/* FAQ Accordion */}
@@ -57,7 +57,7 @@ const Support = () => {
               onClick={() => toggleFAQ(index)}
             >
               {faq.question}
-              <span style={{ marginLeft: '10px' }}>
+              <span style={{ marginLeft: '10px',color:'white'}}>
                 {activeIndex === index ? '▲' : '▼'}
               </span>
             </button>
@@ -70,7 +70,7 @@ const Support = () => {
         ))}
 
         <div className="know-more">
-          <a href="#">Know More &#9654;</a>
+          <a href="#" style={{color:"white"}}>Know More &#9654;</a>
         </div>
       </div>
     </section>

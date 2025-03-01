@@ -18,15 +18,32 @@ const ReceptionDashboard = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/doctors`);
-        setDoctors(response.data);
+        const user_id = localStorage.getItem("user_id");
+        if (!user_id) {
+          console.error("User ID not found in localStorage.");
+          return;
+        }
+  
+        // Fetch the hospital details to get admin_id
+        const hospitalResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/hospitals/${user_id}`);
+        const admin_id = hospitalResponse.data?.admin_id;
+  
+        if (!admin_id) {
+          console.error("Admin ID not found for the hospital.");
+          return;
+        }
+  
+        // Fetch doctors with matching admin_id
+        const doctorsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/doctors?admin_id=${admin_id}`);
+        setDoctors(doctorsResponse.data);
       } catch (error) {
         console.error("Error fetching doctors:", error);
       }
     };
+  
     fetchDoctors();
   }, []);
-
+  
   // Handle Search when Enter is pressed
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -76,15 +93,24 @@ const ReceptionDashboard = () => {
       setMessage("Error registering patient. Try again.");
     }
   };
-
+  const calculateAge = (dob) => {
+    if (!dob) return "N/A";
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+  
   const handleAppointmentChange = (e) => {
     setAppointment({ ...appointment, [e.target.name]: e.target.value });
   };
 
   const handleBookAppointment = async (e) => {
     e.preventDefault();
-
-    // Retrieve reception_id from localStorage
     const reception_id = localStorage.getItem("reception_id");
 
     if (!hdmisNumber || !appointment.doctor_id || !appointment.date || !appointment.time || !reception_id) {
@@ -93,19 +119,50 @@ const ReceptionDashboard = () => {
     }
 
     try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/book_appointment`, {
-            hdmis_number: hdmisNumber, // ✅ Ensure this is correct
+        console.log("Registering patient with:", {
+            hdmis_number: hdmisNumber,
+            full_name: patientData.full_name,
+            age: calculateAge(patientData.date_of_birth),
+            gender: patientData.gender,
+            date_of_birth: patientData.date_of_birth,
+            contact_number: patientData.phone_number,
+            email: patientData.email,
+            address: patientData.address,
+        });
+
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/Patient_detail_for_appointment`, {
+            hdmis_number: hdmisNumber,
+            full_name: patientData.full_name || "Unknown",
+            age: calculateAge(patientData.date_of_birth),
+            gender: patientData.gender || "Unknown",
+            date_of_birth: patientData.date_of_birth || "1900-01-01",
+            contact_number: patientData.phone_number || "0000000000",
+            email: patientData.email || "unknown@example.com",
+            address: patientData.address || "Unknown",
+        });
+
+        console.log("Booking appointment with:", {
+            hdmis_number: hdmisNumber,
             doctor_id: appointment.doctor_id,
             date: appointment.date,
             time: appointment.time,
-            reception_id: reception_id, // Include reception_id from localStorage
+            reception_id: reception_id,
+        });
+
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/book_appointment`, {
+            hdmis_number: hdmisNumber,
+            doctor_id: appointment.doctor_id,
+            date: appointment.date,
+            time: appointment.time,
+            reception_id: reception_id,
         });
 
         setMessage("Appointment booked successfully!");
         setAppointment({ doctor_id: "", date: "", time: "" });
+
     } catch (error) {
-        console.error("Error booking appointment:", error);
-        setMessage("Error booking appointment. Try again.");
+        console.error("Error Response:", error.response?.data || error.message);
+        setMessage("Error registering patient or booking appointment. Try again.");
     }
 };
 
@@ -113,7 +170,7 @@ const ReceptionDashboard = () => {
   return (
     <div>
       <Header />
-      <div className=" mt-5">
+      <div className="mt-5">
         <h2 className="text-center">Reception | Search & Register Patient</h2>
         {message && <p className="text-success text-center mt-3">{message}</p>}
 
@@ -153,9 +210,9 @@ const ReceptionDashboard = () => {
                 <tr>
                   <td>{patientData.full_name}</td>
                   <td>{patientData.hdmis_number}</td>
-                  <td>{patientData.age}</td>
+                  <td>{calculateAge(patientData.date_of_birth)}</td>
                   <td>{patientData.gender}</td>
-                  <td>{patientData.contact_number}</td>
+                  <td>{patientData.phone_number}</td>
                   <td>{patientData.email || "N/A"}</td>
                   <td>{patientData.address || "N/A"}</td>
                 </tr>
@@ -184,40 +241,6 @@ const ReceptionDashboard = () => {
                 <input type="time" className="form-control" name="time" required onChange={handleAppointmentChange} />
               </div>
               <button type="submit" className="btn btn-success mt-2 w-100">Book Appointment</button>
-            </form>
-          </div>
-        )}
-
-        {showRegistration && (
-          <div className="register-form mt-3">
-            <h3 className="text-center">New Patient Registration</h3>
-            <form onSubmit={handleRegister}>
-              <div className="form-group">
-                <label>Age:</label>
-                <input type="number" className="form-control" name="age" required onChange={handleChange} />
-              </div>
-              <div className="form-group">
-                <label>Gender:</label>
-                <select className="form-control" name="gender" required onChange={handleChange}>
-                  <option value="Select">Select</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              {/* <div className="form-group">
-                <label>Contact Number:</label>
-                <input type="text" className="form-control" name="contact_number" required onChange={handleChange} />
-              </div>
-              <div className="form-group">
-                <label>Email:</label>
-                <input type="email" className="form-control" name="email" required onChange={handleChange} />
-              </div> */}
-              <div className="form-group">
-                <label>Address:</label>
-                <textarea className="form-control" name="address" required onChange={handleChange}></textarea>
-              </div>
-              <button type="submit" className="btn btn-success mt-2 w-100">Register Patient</button>
             </form>
           </div>
         )}

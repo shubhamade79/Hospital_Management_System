@@ -2,6 +2,8 @@ import React from "react";
 import UserProfile from "./UserProfile"; // Import the component
 import { Link } from 'react-router-dom';
 import logo from "../../src/HDMIS_IMGS/IMG_HDMIS_7_-_Copy-removebg-preview.svg";
+import "./MobileHeader.css";
+
 const Header = () => {
   return (
     <header className="d-flex justify-content-between p-3 bg-dark text-white">

@@ -19,7 +19,7 @@ const DoctorAllotment = () => {
 
   const [doctorDetails, setDoctorDetails] = useState({
     doctor_id: generateRandomString("DOC", 6),
-    name: "",
+    full_name: "",
     specialization: "",
     phone: "",
     email: "",
@@ -27,7 +27,12 @@ const DoctorAllotment = () => {
     admin_id,
     hospital_name: "",
     hospital_address: "",
+    hospital_city: "", // Add this
+    hospital_state: "", // Add this
+    start_time: "",
+    end_time: "",
   });
+  
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -43,6 +48,8 @@ const DoctorAllotment = () => {
             ...prevDetails,
             hospital_name: response.data.hospital_name,
             hospital_address: response.data.hospital_address,
+            hospital_city: response.data.hospital_city,
+            hospital_state: response.data.hospital_state,
           }));
         } else {
           setErrorMessage("Hospital name not found.");
@@ -83,36 +90,38 @@ const DoctorAllotment = () => {
     <div>
       <Header />
       <div className="container d-flex justify-content-center">
-                <div className="card p-4 shadow-lg" style={{ width: "40rem" }}>
-              <h3 className="text-center mb-4">Doctor Allotment</h3>
-              {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
-              {successMessage && <p className="text-success text-center">{successMessage}</p>}
-              <form onSubmit={handleSubmit}>
-                {Object.entries(doctorDetails).map(([key, value]) => (
-                  <div className="form-group mb-3" key={key}>
-                    <label htmlFor={key} className="fw-bold text-capitalize">
-                      {key.replace("_", " ")}
-                    </label>
-                    <input
-                      type={key === "email" ? "email" : key.includes("time") ? "time" : "text"}
-                      className="form-control"
-                      id={key}
-                      name={key}
-                      value={value}
-                      onChange={handleChange}
-                      required={!["doctor_id", "password", "hospital_name", "hospital_address","admin_id"].includes(key)}
-                      disabled={["doctor_id", "password", "hospital_name", "hospital_address","admin_id"].includes(key)}
-                    />
-                  </div>
-                ))}
-                <button type="submit" className="btn btn-primary w-100 mt-3">
-                  Register Doctor
-                </button>
-              </form>
-            </div>
-          </div>
+        <div className="card p-4 shadow-lg" style={{ width: "40rem" }}>
+          <h3 className="text-center mb-4">Doctor Allotment</h3>
+          {errorMessage && <p className="text-danger text-center">{errorMessage}</p>}
+          {successMessage && <p className="text-success text-center">{successMessage}</p>}
+          <form onSubmit={handleSubmit}>
+            {Object.entries(doctorDetails).map(([key, value]) => (
+              <div className="form-group mb-3" key={key}>
+                <label htmlFor={key} className="fw-bold text-capitalize">
+                  {key.replace("_", " ")}
+                </label>
+                <input
+                  type={
+                    key === "email" ? "email" :
+                    key.includes("time") ? "time" : "text"
+                  }
+                  className="form-control"
+                  id={key}
+                  name={key}
+                  value={value}
+                  onChange={handleChange}
+                  required={!["doctor_id", "password", "hospital_name", "hospital_address", "admin_id","hospital_state","hospital_city"].includes(key)}
+                  disabled={["doctor_id", "password", "hospital_name", "hospital_address", "admin_id","hospital_state","hospital_city"].includes(key)}
+                />
+              </div>
+            ))}
+            <button type="submit" className="btn btn-primary w-100 mt-3">
+              Register Doctor
+            </button>
+          </form>
         </div>
-
+      </div>
+    </div>
   );
 };
 

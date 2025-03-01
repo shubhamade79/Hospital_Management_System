@@ -1,0 +1,11 @@
+.Contact_us_btn{
+    background-color: chocolate;
+    color:white;
+}
+.Contact_us_btn:hover{
+    background-color: rgb(255, 148, 71);
+    /* color:rgb(60, 60, 60) ; */
+}
+.faq-answer{
+    margin:15px;
+}

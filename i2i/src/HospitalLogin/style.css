@@ -74,15 +74,17 @@ body {
 }
 
 /* Form Fields */
-.input-group-text {
-    background: #007bff;
-    color: white;
+.input-group-text_ {
+    /* background: #2e93ff; */
+    height:100% !important; 
+    color: rgb(0, 0, 0) !important;
+    margin-right:5px;
     border: none;
-}
+}   
 
-.form-control {
+.form-control_ {
     border-radius: 5px;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 /* Login Dropdown */
@@ -93,7 +95,7 @@ body {
 
 /* Forgot Password */
 .text-end a {
-    color: #007bff;
+    color: #cfd1d2;
     font-size: 14px;
 }
 
@@ -129,4 +131,9 @@ body {
     .login-container {
         padding: 20px;
     }
+}
+
+
+.login_btn{
+    background-color: darkgreen;
 }

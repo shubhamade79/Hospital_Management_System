@@ -56,7 +56,7 @@ const MobileHeader = () => {
   };
 
   return (
-    <header className="bg-black">
+    <header className="nav_bg_color">
       <nav className="navbar navbar-expand-lg bg-black py-2">
         <div className="container-fluid px-0">
           {/* Logo */}
@@ -66,7 +66,7 @@ const MobileHeader = () => {
 
           {/* Navbar Toggler */}
           <button
-            className="navbar-toggler navbar-dark"
+            className="navbar-toggler text-light"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
@@ -74,12 +74,12 @@ const MobileHeader = () => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon"></span>
+            <span className="bi fs-3 text-light bi-list"></span>
           </button>
 
           {/* Navigation Links */}
           <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ml-0">
+            <ul className="d-flex navbar-nav justify-content-between ml-0  text-center ">
               <li className="nav-item">
                 <Link className="nav-link text-white text-lg font-medium px-4 py-2 hover:text-yellow-500" to="/">
                   Home
@@ -123,12 +123,12 @@ const MobileHeader = () => {
                   </button>
                 </li>
               ) : (
-                <div className="col=3">
+                <div className="col=11 p-3 pr-3 d-flex flex-col justify-content-center">
                     <Link to="/patient-login">
-                      <button className="btn btn-success btn-sm">Patient Login</button>
+                      <button className="btn btn-outline-light">Patient Login</button>
                     </Link>
                     <Link to="/hospital-login">
-                      <button className="btn btn-success btn-sm">Hospital Login</button>
+                      <button className="btn btn-outline-light">Hospital Login</button>
                     </Link>
                 </div>
               )}

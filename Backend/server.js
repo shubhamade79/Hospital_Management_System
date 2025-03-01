@@ -82,12 +82,27 @@ const AadharDetails = mongoose.model("AadharDetails", AadharSchema);
 
 // Users Schema
 const UserSchema = new mongoose.Schema({
+
     aadhar_number: { type: String, unique: true, required: true },
     full_name: { type: String, required: true },
     phone_number: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     hdmis_number: { type: String, unique: true, required: true },
+    address:{type: String, unique: true, required: true},
+    city: { type: String, required: true },
+    gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
+    state: { type: String, required: true },
+    pin_code: { type: String, required: true },
+    date_of_birth:{ type: Date, requried: true},
+    blood_group: { type: String, default: "None" },
+    allergies: { type: String, default: "None" },
+    pre_existing_conditions: { type: String, default: "None" },
+    medications: { type: String, default: "None" },
+    hospital: { type: String,default: "None" },
+    doctor: { type: String ,default: "None"},
+    handicapped: { type: String, default: "None" }, // Fixed syntax
+    income_range: { type: String, default: "None" },
     created_at: { type: Date, default: Date.now }
 });
 
@@ -162,7 +177,13 @@ app.post("/storeAadhaar", async (req, res) => {
             password,  // Store hashed password in production
             phone_number: aadhaar.phone_number,  // Fetch from AadhaarDetails
             email: aadhaar.email,  // Fetch from AadhaarDetails
-            hdmis_number
+            hdmis_number,
+            address: aadhaar.address, // Fetch from AadhaarDetails
+          city: aadhaar.city,       // Fetch from AadhaarDetails
+          state: aadhaar.state,     // Fetch from AadhaarDetails
+          pin_code: aadhaar.pin_code,// Fetch from AadhaarDetails
+          date_of_birth:aadhaar.date_of_birth,
+          gender:aadhaar.gender
         });
 
         await newUser.save();
@@ -180,20 +201,19 @@ app.post("/storeAadhaar", async (req, res) => {
 
 // User Schemas
 const DoctorSchema = new mongoose.Schema({
-    doctor_id: { type: String, required: true, unique: true },
-    full_name: { type: String, required: true },
-    specialization: { type: String, required: true },
-    phone: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    start_time: { type: String, required: true },  // Stored as HH:MM format
-    end_time: { type: String, required: true },    // Stored as HH:MM format
-    password: { type: String, required: true },
-    admin_id: { type: String, required: true },
-    hospital_name: { type: String, required: true },
-    hospital_address: { type: String, required: true },
-    hospital_city: { type: String, required: true },
-    hospital_state: { type: String, required: true },
-
+  doctor_id: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  phone: { type: String, required: true },
+  full_name: { type: String, required: true },
+  specialization: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  hospital_name: { type: String, required: true },
+  hospital_address: { type: String },
+  hospital_city: { type: String, required: true },
+  hospital_state: { type: String, required: true },
+  admin_id: { type: String, required: true },
+  start_time: { type: String, required: true },
+  end_time: { type: String, required: true }
 });
 
 const HospitalAdminSchema = new mongoose.Schema({
@@ -361,7 +381,7 @@ const Appointment = mongoose.model("appointment", appointmentSchema);
 // Get Patient by HDMIS Number
 app.get("/api/patient_detail_for_appointment/:hdmisNumber", async (req, res) => {
     try {
-        const patient = await Patient.findOne({ hdmis_number: req.params.hdmisNumber });
+        const patient = await User.findOne({ hdmis_number: req.params.hdmisNumber });
         if (!patient) {
             return res.status(404).json({ message: "Patient not found" });
         }
@@ -373,75 +393,114 @@ app.get("/api/patient_detail_for_appointment/:hdmisNumber", async (req, res) => 
 
 // Insert the data
 app.post("/api/patient_detail_for_appointment", async (req, res) => {
-    try {
-        const { hdmis_number, age, gender, address } = req.body;
-        
-        // Check if HDMIS number exists in the 'users' collection
-        const user = await mongoose.connection.db.collection("users").findOne({ hdmis_number });
-        if (!user) {
-            return res.status(404).json({ message: "HDMIS Number not found in users collection" });
-        }
+  try {
+      const { hdmis_number, age, gender, address } = req.body;
+      
+      // Check if HDMIS number exists in 'users' collection
+      const user = await User.findOne({ hdmis_number });
+      if (!user) {
+          return res.status(404).json({ message: "HDMIS Number not found in users collection" });
+      }
 
-        const patient = new Patient({
-            hdmis_number,
-            full_name: user.full_name,
-            age,
-            gender,
-            contact_number :user.phone_number,
-            email:user.email,
-            address
-        });
-        
-        await patient.save();
-        res.status(200).json({ message: "Patient registered successfully!" });
-    } catch (error) {
-        res.status(500).json({ message: "Error registering patient", error });
+      // Check if the patient already exists in 'patients' collection
+      const existingPatient = await Patient.findOne({ hdmis_number });
+      if (!existingPatient) {
+          const patient = new Patient({
+              hdmis_number,
+              full_name: user.full_name,
+              age,
+              gender,
+              date_of_birth: user.date_of_birth,
+              contact_number: user.phone_number,
+              email: user.email,
+              address
+          });
+
+          await patient.save();
+      }
+
+      res.status(200).json({ message: "Patient record ensured in patient schema!" });
+
+  } catch (error) {
+      res.status(500).json({ message: "Error registering patient", error });
+  }
+});// Fetch hospital details by user_id
+app.get("/api/hospitals/:user_id", async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    console.log(user_id);
+
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID is required" });
     }
+
+    const hospital = await HospitalLogin.findOne({ user_id }).lean();
+    if (!hospital) {
+      return res.status(404).json({ message: "Hospital not found" });
+    }
+
+    res.json({ admin_id: hospital.admin_id });
+  } catch (error) {
+    console.error("Error fetching hospital data:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // Select Doctor For Appointment
 app.get("/api/doctors", async (req, res) => {
-    try {
-        const doctors = await Doctor.find();
-        res.json(doctors);
-    } catch (error) {
-        res.status(500).json({ error: "Database error" });
+  try {
+    const { admin_id } = req.query;
+    if (!admin_id) {
+      return res.status(400).json({ error: "Admin ID is required" });
     }
+
+    const doctors = await Doctor.find({ admin_id }).lean();
+    if (!doctors.length) {
+      return res.status(404).json({ message: "No doctors found for this admin" });
+    }
+
+    res.json(doctors);
+  } catch (error) {
+    console.error("Error fetching doctors:", error);
+    res.status(500).json({ error: "Database error" });
+  }
 });
+
+
 
 // Appointment Book For Reception
 app.post("/api/book_appointment", async (req, res) => {
-    const { hdmis_number, doctor_id,reception_id, hospital_id, date, time } = req.body;
-  
-    try {
-      // Ensure no duplicate appointment exists for the same doctor, patient, and date
-      const existingAppointment = await Appointment.findOne({ hdmis_number, doctor_id, date });
-  
-      if (existingAppointment) {
-        return res.status(400).json({ message: "Appointment already exists for this patient and doctor on the selected date." });
-      }
-  
-      // Create a new appointment
-      const newAppointment = new Appointment({
-        hdmis_number,
-        doctor_id,
-        hospital_id,
-        reception_id,
-        date,
-        time,
-      });
-  
-      await newAppointment.save();
-  
-  
-      res.status(201).json({ message: "Appointment booked successfully!", appointment: newAppointment });
-  
-    } catch (error) {
-      console.error("Error booking appointment:", error);
-      res.status(500).json({ message: "Error booking appointment. Try again." });
+  const { hdmis_number, doctor_id,reception_id, hospital_id, date, time } = req.body;
+
+  try {
+    // Ensure no duplicate appointment exists for the same doctor, patient, and date
+    const existingAppointment = await Appointment.findOne({ hdmis_number, doctor_id, date });
+
+    if (existingAppointment) {
+      return res.status(400).json({ message: "Appointment already exists for this patient and doctor on the selected date." });
     }
-  });
-  
+
+    // Create a new appointment
+    const newAppointment = new Appointment({
+      hdmis_number,
+      doctor_id,
+      hospital_id,
+      reception_id,
+      date,
+      time,
+    });
+
+    await newAppointment.save();
+
+    res.status(201).json({ message: "Appointment booked successfully!", appointment: newAppointment });
+
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    res.status(500).json({ message: "Error booking appointment. Try again." });
+  }
+});
+
+
 
 
 //Fetch Appoinment Doctor Wise
@@ -512,6 +571,7 @@ const MedicalRecordSchema = new mongoose.Schema({
     hospital_name: { type: String, required: true },
     hospital_city: { type: String, required: true },
     hospital_state: { type: String, required: true },
+    admin_id:{ type: String, required: true },
     filePath: {type: String},
 });
 
@@ -521,9 +581,9 @@ const MedicalRecord = mongoose.model("MedicalRecord", MedicalRecordSchema);
 
 app.post("/updatePatientRecord", async (req, res) => {
     try {
-        const { hdmis_number, medicine, disease, doctor_id,hospital_name,hospital_address,hospital_state,hospital_city,filePath } = req.body;
+        const { hdmis_number, medicine, disease, doctor_id,hospital_name,hospital_address,hospital_state,hospital_city,filePath,admin_id } = req.body;
 
-        if (!hdmis_number || !disease || !doctor_id) {
+        if (!hdmis_number || !disease || !doctor_id || !admin_id) {
             return res.status(400).json({ message: "Missing required fields" });
         }
 
@@ -537,6 +597,7 @@ app.post("/updatePatientRecord", async (req, res) => {
             hospital_state,
             hospital_city,
             filePath,
+            admin_id,
         });
 
         // Save the new medical record
@@ -663,23 +724,27 @@ app.get('/doctors', async (req, res) => {
 
   app.post("/add-doctor", async (req, res) => {
     try {
-      const { doctor_id, password, phone, name, specialization, email, hospital_name,hospital_address, admin_id, start_time, end_time ,hospital_city,hospital_state} = req.body;
+      console.log("Received Data:", req.body); // Debugging
+  
+      const { doctor_id, password, phone, full_name, specialization, email, hospital_name, hospital_address, admin_id, start_time, end_time, hospital_city, hospital_state } = req.body;
   
       // Validate required fields
-      if (!doctor_id || !password || !phone || !name || !specialization || !email || !hospital_name || !admin_id || !start_time || !end_time) {
+      if (!doctor_id || !password || !phone || !full_name || !specialization || !email || !hospital_name || !admin_id || !start_time || !end_time || !hospital_city || !hospital_state) {
         return res.status(400).json({ success: false, message: "All fields are required" });
       }
+  
+      // Check if the doctor already exists
       const existingDoctor = await Doctor.findOne({ email });
-        if (existingDoctor) {
-            return res.status(400).json({ error: "Email is already registered!" });
-        }
+      if (existingDoctor) {
+        return res.status(400).json({ error: "Email is already registered!" });
+      }
   
       // Create a new doctor document
       const newDoctor = new Doctor({
         doctor_id,
-        password,  
+        password,
         phone,
-        name,
+        full_name,
         specialization,
         email,
         hospital_name,
@@ -687,22 +752,23 @@ app.get('/doctors', async (req, res) => {
         hospital_city,
         hospital_state,
         admin_id,
-        start_time,  // Ensure this is included
-        end_time     // Ensure this is included
+        start_time,
+        end_time
       });
-        
-      // Email content
+  
+      // Save doctor
+      await newDoctor.save();
+  
+      // Send confirmation email
       let mailOptions = {
         from: admin_id,
         to: email,
         subject: "Doctor Registration Successful",
-        text: `Hello Dr. ${name},\n\nYou have been successfully registered at ${hospital_name}.\n\nYour Login Credentials:\nDoctor ID: ${doctor_id}\nPassword: ${password}\n\nPlease keep this information safe.\n\nRegards,\nHospital Management Team`,
+        text: `Hello Dr. ${full_name},\n\nYou have been successfully registered at ${hospital_name}.\n\nYour Login Credentials:\nDoctor ID: ${doctor_id}\nPassword: ${password}\n\nPlease keep this information safe.\n\nRegards,\nHospital Management Team`,
       };
   
-      // Send email
       await transporter.sendMail(mailOptions);
-      // Save to MongoDB
-      await newDoctor.save();
+  
       res.json({ success: true, message: "Doctor registered successfully!" });
   
     } catch (error) {
@@ -711,12 +777,13 @@ app.get('/doctors', async (req, res) => {
     }
   });
   
+  
 
 app.post("/add-receptionist", async (req, res) => {
   try {
-    const { user_id, password, contact, name, hospital_name,hospital_address, admin_id ,email,hospital_city,hospital_state} = req.body;
+    const { user_id, password, contact, full_name, hospital_name,hospital_address, admin_id ,email,hospital_city,hospital_state} = req.body;
 
-    if (!user_id || !password || !contact || !name || !hospital_name || !admin_id || !email) {
+    if (!user_id || !password || !contact || !full_name || !hospital_name || !admin_id || !email) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
@@ -726,7 +793,7 @@ app.post("/add-receptionist", async (req, res) => {
       password,  // Password stored as plain text
       contact,
       email,
-      name,
+      full_name,
       hospital_name,
       hospital_address,
       admin_id,
@@ -738,7 +805,7 @@ app.post("/add-receptionist", async (req, res) => {
         from: admin_id,
         to: email,
         subject: "Receptionist Registration Successful",
-        text: `Hello ${name},\n\nYou have been successfully registered at ${hospital_name}.\n\nYour Login Credentials:\nUser ID: ${user_id}\nPassword: ${password}\n\nPlease keep this information safe.\n\nRegards,\nHospital Management Team`,
+        text: `Hello ${full_name},\n\nYou have been successfully registered at ${hospital_name}.\n\nYour Login Credentials:\nUser ID: ${user_id}\nPassword: ${password}\n\nPlease keep this information safe.\n\nRegards,\nHospital Management Team`,
     };
   
       // Send email
@@ -1215,6 +1282,44 @@ const Contact = mongoose.model("Contact", ContactSchema);
     }
   });
 
+
+
+// ✅ Fetch patient details by HDMIS number
+app.get("/api/patients/:hdmisId", async (req, res) => {
+  try {
+    const patient = await User.findOne({ hdmis_number: req.params.hdmisId });
+
+    if (!patient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    res.json(patient);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// ✅ Update blood group in MongoDB
+// ✅ Update patient details dynamically
+app.put("/api/patients/:hdmisId", async (req, res) => {
+  try {
+    const updates = req.body;
+
+    const updatedPatient = await User.findOneAndUpdate(
+      { hdmis_number: req.params.hdmisId },
+      updates,
+      { new: true } // Return updated document
+    );
+
+    if (!updatedPatient) {
+      return res.status(404).json({ message: "Patient not found" });
+    }
+
+    res.json({ message: "Patient details updated successfully", data: updatedPatient });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update patient details", error });
+  }
+});
 
 // Default Route
 app.get('/', (req, res) => {
