@@ -1080,10 +1080,10 @@ const findUserByIdAndRole = async (id, role) => {
         case "Doctor":
             user = await Doctor.findOne({ doctor_id: id });
             break;
-        case "Receptionist":
+        case "Reception":
             user = await HospitalLogin.findOne({ user_id: id });
             break;
-        case "Admin":
+        case "Hospital Admin":
             user = await HospitalAdmin.findOne({ user_id: id });
             break;
         case "user":
