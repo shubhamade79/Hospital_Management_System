@@ -220,6 +220,7 @@ const HospitalAdminSchema = new mongoose.Schema({
     user_id: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     full_name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     hospital_name: { type: String, required: true },
     hospital_address: { type: String, required: true },
     hospital_city: { type: String, required: true },
