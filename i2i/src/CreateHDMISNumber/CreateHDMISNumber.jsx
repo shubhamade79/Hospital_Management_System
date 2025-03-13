@@ -41,49 +41,52 @@ const CreateHDMISNumber = () => {
         }
     };
     const handleSubmit = async () => {
-                if (useAadhaar) {
-                    const aadhaar_number = aadhaar.join("");
-                    if (aadhaar_number.length !== 12 || !fullName || !password) {
-                        alert("Please fill all fields correctly");
-                        return;
-                    }
-                    try {
-                        const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeAadhaar`, {
-                            aadhaar_number, full_name: fullName, password
-                        });
-        
-                        if (response.data.hdmis_number) {
-                            setHdmisNumber(response.data.hdmis_number);
-                            setSubmittedName(fullName);
-                            sendHdmisEmail(response.data.hdmis_number);
-                        } else {
-                            alert("Failed to generate HDMIS number");
-                        }
-                    } catch (error) {
-                        alert("Failed to store user data");
-                    }
+        if (useAadhaar) {
+            const aadhaar_number = aadhaar.join("");
+            if (aadhaar_number.length !== 12 || !fullName || !password) {
+                alert("Please fill all fields correctly");
+                return;
+            }
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeAadhaar`, {
+                    aadhaar_number, full_name: fullName, password
+                });
+    
+                if (response.data.hdmis_number) {
+                    setHdmisNumber(response.data.hdmis_number);
+                    setSubmittedName(fullName);
+                    console.log("HDMIS Number Generated (Aadhaar):", response.data.hdmis_number);
+                    await sendHdmisEmail(response.data.hdmis_number); // Ensure email is sent
                 } else {
-                    if (!fullName || !email || !phoneNumber || !password) {
-                        alert("Please fill all fields correctly");
-                        return;
-                    }
-                    try {
-                        const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeManualUser`, {
-                            full_name: fullName, email, phone_number: phoneNumber, password
-                        });
-        
-                        if (response.data.hdmis_number) {
-                            setHdmisNumber(response.data.hdmis_number);
-                            setSubmittedName(fullName);
-                            sendHdmisEmail(response.data.hdmis_number);
-                        } else {
-                            alert("Failed to generate HDMIS number");
-                        }
-                    } catch (error) {
-                        alert("Failed to store user data");
-                    }
+                    alert("Failed to generate HDMIS number");
                 }
-            };
+            } catch (error) {
+                alert("Failed to store user data");
+            }
+        } else {
+            if (!fullName || !email || !phoneNumber || !password) {
+                alert("Please fill all fields correctly");
+                return;
+            }
+            try {
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/storeManualUser`, {
+                    full_name: fullName, email, phone_number: phoneNumber, password
+                });
+    
+                if (response.data.hdmis_number) {
+                    setHdmisNumber(response.data.hdmis_number);
+                    setSubmittedName(fullName);
+                    console.log("HDMIS Number Generated (Manual Entry):", response.data.hdmis_number);
+                    await sendHdmisEmail(response.data.hdmis_number); // Ensure email is sent
+                } else {
+                    alert("Failed to generate HDMIS number");
+                }
+            } catch (error) {
+                alert("Failed to store user data");
+            }
+        }
+    };
+    
     // 2️⃣ Function to send OTP to fetched email
     const sendOtp = async (email) => {
         try {
