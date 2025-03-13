@@ -80,21 +80,46 @@ const AadharSchema = new mongoose.Schema({
 
 const AadharDetails = mongoose.model("AadharDetails", AadharSchema);
 
+// // Users Schema
+// const UserSchema = new mongoose.Schema({
+
+//     aadhar_number: { type: String, unique: true, required: true },
+//     full_name: { type: String, required: true },
+//     phone_number: { type: String, required: true },
+//     email: { type: String, required: true },
+//     password: { type: String, required: true },
+//     hdmis_number: { type: String, unique: true, required: true },
+//     address:{type: String, unique: true, required: true},
+//     city: { type: String, required: true },
+//     gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
+//     state: { type: String, required: true },
+//     pin_code: { type: String, required: true },
+//     date_of_birth:{ type: Date, requried: true},
+//     blood_group: { type: String, default: "None" },
+//     allergies: { type: String, default: "None" },
+//     pre_existing_conditions: { type: String, default: "None" },
+//     medications: { type: String, default: "None" },
+//     hospital: { type: String,default: "None" },
+//     doctor: { type: String ,default: "None"},
+//     handicapped: { type: String, default: "None" }, // Fixed syntax
+//     income_range: { type: String, default: "None" },
+//     created_at: { type: Date, default: Date.now }
+// });
 // Users Schema
 const UserSchema = new mongoose.Schema({
 
-    aadhar_number: { type: String, unique: true, required: true },
+    aadhar_number: { type: String },
     full_name: { type: String, required: true },
     phone_number: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     hdmis_number: { type: String, unique: true, required: true },
-    address:{type: String, unique: true, required: true},
-    city: { type: String, required: true },
-    gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
-    state: { type: String, required: true },
-    pin_code: { type: String, required: true },
-    date_of_birth:{ type: Date, requried: true},
+    address:{type: String, unique: true},
+    city: { type: String},
+    gender: { type: String, enum: ["Male", "Female", "Other"]},
+    state: { type: String },
+    pin_code: { type: String},
+    date_of_birth:{ type: Date},
     blood_group: { type: String, default: "None" },
     allergies: { type: String, default: "None" },
     pre_existing_conditions: { type: String, default: "None" },
